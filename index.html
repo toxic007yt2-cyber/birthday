@@ -95,7 +95,7 @@ margin-top:10px;
 <body>
 
 <div class="card">
-<img src="photo1.jpg">
+<img id="slide" src="photo1.jpg">
 <h2>Happy Birthday Babayyy ❤️</h2>
 
 <div id="count"></div>
@@ -113,7 +113,20 @@ margin-top:10px;
 </div>
 
 <script>
+// Photo slideshow
+let images = [
+  "photo1.jpg",
+  "photo2.jpg",
+  "photo3.jpg"
+];
 
+let index = 0;
+
+setInterval(()=>{
+  index++;
+  if(index >= images.length) index = 0;
+  document.getElementById("slide").src = images[index];
+},2000);
 /* Countdown to 12th */
 var target=new Date();
 target.setDate(12);
