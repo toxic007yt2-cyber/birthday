@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Happy Birthday Babayyy ❤️</title>
+
+<style>
+body{
+    margin:0;
+    font-family: Arial, sans-serif;
+    background: linear-gradient(135deg,#ff758c,#ff7eb3);
+    overflow:hidden;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    height:100vh;
+    color:white;
+}
+
+/* Card */
+.card{
+    background: rgba(0,0,0,0.4);
+    padding:25px;
+    border-radius:20px;
+    text-align:center;
+    box-shadow:0 0 25px rgba(0,0,0,0.4);
+    animation: fadeIn 2s ease;
+}
+
+/* Slideshow */
+.slideshow{
+    width:220px;
+    height:220px;
+    overflow:hidden;
+    border-radius:15px;
+    margin:auto;
+}
+.slideshow img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+}
+
+/* Cake bounce */
+.cake{
+    font-size:40px;
+    animation:bounce 1.5s infinite;
+}
+
+/* Hearts */
+.heart{
+    position:absolute;
+    animation: float 6s linear infinite;
+}
+
+@keyframes float{
+    from{transform:translateY(100vh) scale(1);}
+    to{transform:translateY(-10vh) scale(1.5);}
+}
+
+@keyframes bounce{
+    0%,100%{transform:translateY(0);}
+    50%{transform:translateY(-10px);}
+}
+
+@keyframes fadeIn{
+    from{opacity:0; transform:scale(0.7);}
+    to{opacity:1; transform:scale(1);}
+}
+
+/* Popup */
+.popup{
+    position:fixed;
+    top:0;left:0;
+    width:100%;
+    height:100%;
+    background:rgba(0,0,0,0.7);
+    display:none;
+    justify-content:center;
+    align-items:center;
+}
+.popupBox{
+    background:white;
+    color:black;
+    padding:20px;
+    border-radius:15px;
+    text-align:center;
+}
+
+/* Fireworks canvas */
+canvas{
+    position:fixed;
+    top:0;
+    left:0;
+    pointer-events:none;
+}
+</style>
+</head>
+
+<body>
+
+<canvas id="fireworks"></canvas>
+
+<audio autoplay loop>
+<source src="music.mp3" type="audio/mp3">
+</audio>
+
+<div class="card" onclick="showPopup()">
+
+<div class="slideshow">
+<img id="slide" src="photo1.jpg">
+</div>
+
+<h1>Happy Birthday Babayyy ❤️</h1>
+
+<p id="loveCounter"></p>
+
+<p id="typeText"></p>
+
+<div class="cake">🎂</div>
+
+</div>
+
+<div class="popup" id="popup">
+<div class="popupBox">
+<h2>For You ❤️</h2>
+<p>
+You are my happiness, my smile, my everything 💕  
+Thank you for being in my life Babayyy
+</p>
+<button onclick="closePopup()">Close</button>
+</div>
+</div>
+
+<script>
+
+/* -------- Slideshow -------- */
+const images=["photo1.jpg","photo2.jpg","photo3.jpg"];
+let i=0;
+setInterval(()=>{
+    i=(i+1)%images.length;
+    document.getElementById("slide").src=images[i];
+},2000);
+
+/* -------- Typewriter -------- */
+const msg="I love you more every single day 💖";
+let j=0;
+function type(){
+    if(j<msg.length){
+        document.getElementById("typeText").innerHTML+=msg.charAt(j);
+        j++;
+        setTimeout(type,80);
+    }
+}
+type();
+
+/* -------- Hearts -------- */
+function createHeart(){
+    const heart=document.createElement("div");
+    heart.classList.add("heart");
+    heart.innerHTML="❤️";
+    heart.style.left=Math.random()*100+"vw";
+    heart.style.fontSize=(Math.random()*20+20)+"px";
+    document.body.appendChild(heart);
+    setTimeout(()=>heart.remove(),6000);
+}
+setInterval(createHeart,300);
+
+/* -------- Popup -------- */
+function showPopup(){
+    document.getElementById("popup").style.display="flex";
+}
+function closePopup(){
+    document.getElementById("popup").style.display="none";
+}
+
+/* -------- Love Counter -------- */
+// 👉 यहाँ अपनी relationship start date डालो
+const startDate = new Date("2024-01-01");
+
+function updateLove(){
+    const now = new Date();
+    const diff = now - startDate;
+    const days = Math.floor(diff/(1000*60*60*24));
+    document.getElementById("loveCounter").innerHTML =
+        "Together for ❤️ " + days + " days";
+}
+updateLove();
+
+/* -------- Fireworks -------- */
+const canvas=document.getElementById("fireworks");
+const ctx=canvas.getContext("2d");
+canvas.width=window.innerWidth;
+canvas.height=window.innerHeight;
+
+function firework(){
+    const x=Math.random()*canvas.width;
+    const y=Math.random()*canvas.height/2;
+    for(let k=0;k<30;k++){
+        ctx.beginPath();
+        ctx.arc(x+Math.random()*50,y+Math.random()*50,2,0,Math.PI*2);
+        ctx.fillStyle="white";
+        ctx.fill();
+    }
+}
+setInterval(()=>{
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    firework();
+},500);
+
+</script>
+
+</body>
+</html>
