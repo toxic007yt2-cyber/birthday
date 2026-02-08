@@ -165,7 +165,29 @@ heart.style.fontSize=(Math.random()*20+10)+"px";
 document.body.appendChild(heart);
 setTimeout(()=>heart.remove(),6000);
 },300);
+// 🎉 Confetti on Birthday Popup
+function launchConfetti(){
+    for(let i=0;i<80;i++){
+        let conf=document.createElement("div");
+        conf.innerHTML="🎉";
+        conf.style.position="fixed";
+        conf.style.left=Math.random()*100+"vw";
+        conf.style.top="-20px";
+        conf.style.fontSize=(Math.random()*20+15)+"px";
+        conf.style.animation="fall 3s linear forwards";
+        document.body.appendChild(conf);
 
+        setTimeout(()=>conf.remove(),3000);
+    }
+}
+
+let oldPopup = document.getElementById("pop");
+let observer = new MutationObserver(()=>{
+    if(oldPopup.style.display==="flex"){
+        launchConfetti();
+    }
+});
+observer.observe(oldPopup,{attributes:true});
 </script>
 
 </body>
