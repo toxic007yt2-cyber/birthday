@@ -113,12 +113,29 @@ margin-top:10px;
 
 <div class="popup" id="pop">
 <div class="popup-box">
-<h1>🎉 Surprise 🎉</h1>
-<p>I Love You So Much ❤️</p>
-</div>
-</div>
+<h1>🎉 HAPPY BIRTHDAY 🎉</h1>
+<p>You are my everything ❤️</p>
 
-<script>
+<button onclick="goFull()">
+Open Surprise 💖
+</button>
+
+</div>
+</div>
+observer.observe(oldPopup,{attributes:true});
+
+// 👉 यहीं paste करो 👇
+function goFull(){
+  document.documentElement.requestFullscreen();
+
+  document.body.style.background =
+    "linear-gradient(135deg,#ff2e63,#ff8fab)";
+
+  document.body.innerHTML +=
+    "<h1 style='position:fixed;top:40%;width:100%;text-align:center;font-size:40px;color:white;'>💖 LOVE YOU FOREVER 💖</h1>";
+}
+
+
 // Photo slideshow
 let images = [
   "photo1.jpg",
