@@ -117,7 +117,7 @@ margin-top:10px;
 <h1>🎉 HAPPY BIRTHDAY 🎉</h1>
 <p>You are my everything ❤️</p>
 
-<button onclick="goFull()">
+<button onclick="openLetter()">
 Open Surprise 💖
 </button>
 
@@ -139,7 +139,23 @@ Open Surprise 💖
 
     <script>
 // 👉 यहीं paste करो 👇
+function closeLetter(){
+  document.getElementById("letter").style.display="none";
+}
+
+function openLetter(){
+  document.getElementById("letter").style.display="flex";
+}
+
 function goFull(){
+  document.documentElement.requestFullscreen();
+
+  document.body.style.background =
+    "linear-gradient(135deg,#ff2e63,#ff8fab)";
+
+  document.body.innerHTML +=
+    "<h1 style='position:fixed;top:40%;width:100%;text-align:center;font-size:40px;color:white;'>💖 LOVE YOU FOREVER 💖</h1>";
+}
   document.documentElement.requestFullscreen();
 
   document.body.style.background =
