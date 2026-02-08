@@ -101,9 +101,26 @@ canvas{
 
 <canvas id="fireworks"></canvas>
 
-<audio autoplay loop>
-<source src="music.mp3" type="audio/mp3">
+<audio id="bgMusic" loop>
+  <source src="music.mp3" type="audio/mp3">
 </audio>
+
+<button onclick="playMusic()" style="
+padding:10px 20px;
+border:none;
+border-radius:10px;
+background:#ff4d6d;
+color:white;
+font-size:16px;
+margin-top:10px;">
+▶ Play Music ❤️
+</button>
+
+<script>
+function playMusic(){
+  document.getElementById("bgMusic").play();
+}
+</script>
 
 <div class="card" onclick="showPopup()">
 
