@@ -139,34 +139,18 @@ Open Surprise 💖
 
     <script>
 // 👉 यहीं paste करो 👇
-function closeLetter(){
-  document.getElementById("letter").style.display="none";
-}
-
-function openLetter(){
-  document.getElementById("letter").style.display="flex";
-}
-
 function goFull(){
-  document.documentElement.requestFullscreen();
-
-  document.body.style.background =
-    "linear-gradient(135deg,#ff2e63,#ff8fab)";
-
-  document.body.innerHTML +=
-    "<h1 style='position:fixed;top:40%;width:100%;text-align:center;font-size:40px;color:white;'>💖 LOVE YOU FOREVER 💖</h1>";
-}
-  document.documentElement.requestFullscreen();
-
-  document.body.style.background =
-    "linear-gradient(135deg,#ff2e63,#ff8fab)";
-
-  document.body.innerHTML +=
-    "<h1 style='position:fixed;top:40%;width:100%;text-align:center;font-size:40px;color:white;'>💖 LOVE YOU FOREVER 💖</h1>";
+document.documentElement.requestFullscreen();
+document.getElementById("letter").style.display="flex";
 }
 
+function closeLetter(){
+document.getElementById("letter").style.display="none";
+}
 
-// Photo slideshow
+function playMusic(){
+document.getElementById("song").play();
+}
 let images = [
   "photo1.jpg",
   "photo2.jpg",
