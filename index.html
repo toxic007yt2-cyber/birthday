@@ -191,6 +191,29 @@ Open Surprise 💖
 </div>
 
     <script>
+     // 💖 Floating Background Hearts
+function floatingHearts(){
+  let h = document.createElement("div");
+  h.innerHTML = "💖";
+  h.style.position="fixed";
+  h.style.left=Math.random()*100+"vw";
+  h.style.bottom="-20px";
+  h.style.fontSize=(12+Math.random()*18)+"px";
+  h.style.opacity=Math.random();
+  h.style.pointerEvents="none";
+  h.style.transition="3s linear";
+
+  document.body.appendChild(h);
+
+  setTimeout(()=>{
+    h.style.bottom="110vh";
+    h.style.opacity=0;
+  },50);
+
+  setTimeout(()=>h.remove(),3000);
+}
+
+setInterval(floatingHearts, 500);
 // 👉 यहीं paste करो 👇
 function goFull(){
 document.documentElement.requestFullscreen();
