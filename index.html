@@ -274,12 +274,20 @@ document.getElementById("song").play();
 }
 
 /* 🎵 Music Glow Pulse */
-let audio = document.getElementById("song");
-audio.addEventListener("play", ()=>{
-  document.querySelector(".card").style.animation="glowPulse 1s infinite";
-});
-audio.addEventListener("pause", ()=>{
-  document.querySelector(".card").style.animation="";
+window.addEventListener("DOMContentLoaded", () => {
+
+  let audio = document.getElementById("song");
+
+  if(audio){
+    audio.addEventListener("play", ()=>{
+      document.querySelector(".card").style.animation="glowPulse 1s infinite";
+    });
+
+    audio.addEventListener("pause", ()=>{
+      document.querySelector(".card").style.animation="";
+    });
+  }
+
 });
 /* Hearts */
 setInterval(()=>{
