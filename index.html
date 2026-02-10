@@ -1,27 +1,31 @@
 <!DOCTYPE html><html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Happy Birthday Babayyy ❤️</title><style>
+<title>Ultimate Birthday Experience ❤️</title><style>
+
+/* ===== BASE ===== */
 body{
 margin:0;
-font-family:sans-serif;
-background:linear-gradient(270deg,#ff416c,#ff4b2b,#1e3c72,#2a5298);
-background-size:800% 800%;
-animation:bgFlow 20s ease infinite;
+font-family:'Segoe UI',sans-serif;
 color:white;
 height:100vh;
+overflow:hidden;
 display:flex;
 align-items:center;
 justify-content:center;
-overflow:hidden;
+
+background:linear-gradient(270deg,#ff416c,#1e3c72,#2a5298,#ff4b2b);
+background-size:800% 800%;
+animation:bgMove 20s ease infinite;
 }
 
-@keyframes bgFlow{
+@keyframes bgMove{
 0%{background-position:0% 50%}
 50%{background-position:100% 50%}
 100%{background-position:0% 50%}
 }
 
+/* ===== CANVAS LAYERS ===== */
 canvas{
 position:fixed;
 top:0;
@@ -29,43 +33,78 @@ left:0;
 z-index:0;
 }
 
+/* ===== MAIN CARD ===== */
 .card{
 position:relative;
 z-index:2;
-background:rgba(255,255,255,.15);
+background:rgba(255,255,255,.12);
 backdrop-filter:blur(20px);
-padding:25px;
+padding:30px;
 border-radius:20px;
 text-align:center;
-width:300px;
-box-shadow:0 0 25px #ff4b2b,0 0 45px #ff416c;
+width:320px;
+border:1px solid rgba(255,255,255,.25);
+
+box-shadow:
+0 0 25px #ff4b2b,
+0 0 45px #ff416c,
+0 0 60px rgba(255,255,255,.2);
+
 transition:transform .2s;
 }
 
-img{
-width:140px;height:140px;
+/* Light sweep */
+.card::before{
+content:"";
+position:absolute;
+top:-50%;
+left:-70%;
+width:60%;
+height:200%;
+background:rgba(255,255,255,.3);
+transform:rotate(25deg);
+transition:.6s;
+}
+.card:hover::before{left:140%}
+
+/* ===== IMAGE ===== */
+#slide{
+width:140px;
+height:140px;
 border-radius:15px;
+object-fit:cover;
+cursor:pointer;
+transition:.3s;
 }
 
+/* ===== BUTTONS ===== */
 button{
 margin-top:12px;
 padding:10px 18px;
 border:none;
 border-radius:12px;
-background:#ff416c;
+background:linear-gradient(45deg,#ff4b2b,#ff416c);
 color:white;
+font-weight:bold;
 cursor:pointer;
+transition:.3s;
+}
+button:hover{
+transform:scale(1.1);
 }
 
+/* ===== POPUP ===== */
 .popup{
 position:fixed;
-top:0;left:0;
-width:100%;height:100%;
-background:rgba(0,0,0,.7);
+top:0;
+left:0;
+width:100%;
+height:100%;
 display:none;
 align-items:center;
 justify-content:center;
-z-index:3;
+background:rgba(0,0,0,.7);
+z-index:5;
 }
 .popup-box{
 background:white;
@@ -73,27 +112,183 @@ color:black;
 padding:25px;
 border-radius:20px;
 }
-</style></head><body><canvas id="stars"></canvas>
 
-<div class="card">
-<img id="slide" src="photo1.jpg">
-<h2>Happy Birthday Babayyy ❤️</h2><p id="typing"></p>
-<div id="quote"></div><button onclick="openLetter()">💌 Love Letter</button>
+/* ===== VISUALIZER ===== */
+#visualizer{
+display:flex;
+justify-content:center;
+gap:4px;
+margin-top:10px;
+}
+.bar{
+width:4px;
+height:10px;
+background:white;
+}
 
-<div id="count"></div><button onclick="playMusic()">🎵 Play Song</button>
-<button onclick="toggleTheme()">🌓 Theme</button>
+/* ===== FULLSCREEN VIEWER ===== */
+#viewer{
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+display:none;
+align-items:center;
+justify-content:center;
+background:black;
+z-index:6;
+}
+#viewer img{
+max-width:90%;
+max-height:90%;
+}
 
-<audio id="song" src="music.mp3"></audio>
+/* ===== TRAIL ===== */
+.trail{
+position:fixed;
+pointer-events:none;
+font-size:18px;
+animation:fade 1s forwards;
+}
+@keyframes fade{
+to{opacity:0;transform:translateY(-20px)}
+}
 
-</div><div id="letter" class="popup">
+</style></head><body><!-- Particle canvas --><canvas id="stars"></canvas>
+
+<div class="card"><img id="slide" src="photo1.jpg"><h2>Happy Birthday Babayyy ❤️</h2>
+<p id="typing"></p><button onclick="openLetter()">💌 Love Letter</button>
+<button onclick="playMusic()">🎵 Play</button>
+
+<div id="visualizer"></div>
+<div id="count"></div><audio id="song" src="music.mp3"></audio>
+
+</div><!-- POPUPS --><div id="letter" class="popup">
 <div class="popup-box">
-<h2>💖 My Love</h2>
-<p>You are my everything ❤️</p>
+<h2>My Love ❤️</h2>
+<p>You are my everything</p>
 <button onclick="closeLetter()">Close</button>
 </div>
-</div><script>
+</div><!-- IMAGE VIEWER --><div id="viewer" onclick="this.style.display='none'">
+<img id="viewImg">
+<script>
 
-// ===== Stars Background =====
+/* ===== IMAGE SLIDESHOW (13 photos) ===== */
+let images=[
+"photo1.jpg","photo2.jpg","photo3.jpg","photo4.jpg",
+"photo5.jpg","photo6.jpg","photo7.jpg","photo8.jpg",
+"photo9.jpg","photo10.jpg","photo11.jpg","photo12.jpg",
+"photo13.jpg"
+];
+
+let idx=0;
+setInterval(()=>{
+idx=(idx+1)%images.length;
+slide.src=images[idx];
+},2000);
+
+/* Click zoom viewer */
+slide.onclick=()=>{
+viewImg.src=slide.src;
+viewer.style.display="flex";
+};
+
+
+/* ===== LOVE LETTER ===== */
+function openLetter(){
+letter.style.display="flex";
+confettiBurst();
+}
+function closeLetter(){
+letter.style.display="none";
+}
+
+
+/* ===== MUSIC ===== */
+function playMusic(){
+song.play();
+startVisualizer();
+}
+
+
+/* ===== VISUALIZER ===== */
+for(let i=0;i<30;i++){
+let b=document.createElement("div");
+b.className="bar";
+visualizer.appendChild(b);
+}
+let bars=document.querySelectorAll(".bar");
+
+function startVisualizer(){
+setInterval(()=>{
+bars.forEach(bar=>{
+bar.style.height=(Math.random()*40+5)+"px";
+});
+},120);
+}
+
+
+/* ===== TYPEWRITER ===== */
+let text="You are my universe ❤️ Happy Birthday 🎂";
+let t=0;
+function type(){
+if(t<text.length){
+typing.innerHTML+=text[t++];
+setTimeout(type,60);
+}}
+type();
+
+
+/* ===== COUNTDOWN ===== */
+let target=new Date();
+target.setDate(12);
+target.setHours(0,0,0,0);
+
+setInterval(()=>{
+let diff=target-new Date();
+if(diff<=0){
+count.innerHTML="🎂 TODAY 🎂";
+fireworks();
+}else{
+let d=Math.floor(diff/86400000);
+let h=Math.floor(diff%86400000/3600000);
+let m=Math.floor(diff%3600000/60000);
+let s=Math.floor(diff%60000/1000);
+count.innerHTML=`${d}d ${h}h ${m}m ${s}s ❤️`;
+}
+},1000);
+
+
+/* ===== HEART TRAIL ===== */
+document.addEventListener("mousemove",(e)=>{
+let t=document.createElement("div");
+t.className="trail";
+t.innerHTML="❤️";
+t.style.left=e.clientX+"px";
+t.style.top=e.clientY+"px";
+document.body.appendChild(t);
+setTimeout(()=>t.remove(),800);
+});
+
+
+/* ===== CARD TILT ===== */
+let card=document.querySelector(".card");
+card.addEventListener("mousemove",(e)=>{
+let r=card.getBoundingClientRect();
+let x=e.clientX-r.left;
+let y=e.clientY-r.top;
+card.style.transform=
+`perspective(600px)
+rotateX(${-(y/r.height-.5)*15}deg)
+rotateY(${(x/r.width-.5)*15}deg)`;
+});
+card.addEventListener("mouseleave",()=>{
+card.style.transform="rotateX(0) rotateY(0)";
+});
+
+
+/* ===== PARTICLE STARS ===== */
 let c=document.getElementById("stars");
 let ctx=c.getContext("2d");
 c.width=innerWidth;
@@ -107,79 +302,14 @@ ctx.clearRect(0,0,c.width,c.height);
 ctx.fillStyle="white";
 stars.forEach(s=>{
 ctx.fillRect(s.x,s.y,2,2);
-s.y+=0.3;
+s.y+=0.4;
 if(s.y>c.height)s.y=0;
 });
 },30);
 
-// ===== Popup =====
-function openLetter(){
-document.getElementById("letter").style.display="flex";
-confetti();
-}
-function closeLetter(){
-document.getElementById("letter").style.display="none";
-}
 
-// ===== Music Fade =====
-function playMusic(){
-let a=document.getElementById("song");
-a.volume=0;
-a.play();
-let v=0;
-let fade=setInterval(()=>{
-v+=0.05;
-a.volume=v;
-if(v>=1)clearInterval(fade);
-},200);
-}
-
-// ===== Typing =====
-let msg="You are my everything ❤️ Happy Birthday 🎂";
-let i=0;
-function type(){
-if(i<msg.length){
-typing.innerHTML+=msg[i++];
-setTimeout(type,60);
-}}
-type();
-
-// ===== Quotes =====
-let q=[
-"Forever yours ❤️",
-"My heart beats for you 💕",
-"You are my happiness ✨",
-"Always together 💖"
-];
-setInterval(()=>{
-quote.innerHTML=q[Math.floor(Math.random()*q.length)];
-},3000);
-
-// ===== Countdown =====
-let target=new Date();
-target.setDate(12);
-target.setHours(0,0,0,0);
-setInterval(()=>{
-let diff=target-new Date();
-if(diff<0){count.innerHTML="🎂 TODAY 🎂";fireworks();}
-else{
-let d=Math.floor(diff/86400000);
-let h=Math.floor(diff%86400000/3600000);
-let m=Math.floor(diff%3600000/60000);
-let s=Math.floor(diff%60000/1000);
-count.innerHTML=d+"d "+h+"h "+m+"m "+s+"s";
-}},1000);
-
-// ===== Slideshow =====
-let imgs=["photo1.jpg","photo2.jpg","photo3.jpg"];
-let idx=0;
-setInterval(()=>{
-idx=(idx+1)%imgs.length;
-slide.src=imgs[idx];
-},2000);
-
-// ===== Confetti =====
-function confetti(){
+/* ===== CONFETTI ===== */
+function confettiBurst(){
 for(let i=0;i<40;i++){
 let d=document.createElement("div");
 d.innerHTML="🎉";
@@ -191,7 +321,8 @@ setTimeout(()=>d.remove(),2000);
 }
 }
 
-// ===== Fireworks =====
+
+/* ===== FIREWORKS ===== */
 function fireworks(){
 for(let i=0;i<20;i++){
 let f=document.createElement("div");
@@ -204,42 +335,21 @@ setTimeout(()=>f.remove(),1500);
 }
 }
 
-// ===== Cursor Sparkle =====
-document.addEventListener("mousemove",(e)=>{
-let s=document.createElement("div");
-s.innerHTML="💖";
-s.style.position="fixed";
-s.style.left=e.clientX+"px";
-s.style.top=e.clientY+"px";
-document.body.appendChild(s);
-setTimeout(()=>s.remove(),500);
+
+/* ===== KEYBOARD SHORTCUTS ===== */
+document.addEventListener("keydown",(e)=>{
+if(e.key==="m") playMusic();
+if(e.key==="l") openLetter();
+if(e.key==="f") fireworks();
 });
 
-// ===== Tilt =====
-let card=document.querySelector(".card");
-card.addEventListener("mousemove",(e)=>{
-let r=card.getBoundingClientRect();
-let x=e.clientX-r.left;
-let y=e.clientY-r.top;
-card.style.transform=
-`perspective(600px) rotateX(${-(y/r.height-.5)*15}deg)
- rotateY(${(x/r.width-.5)*15}deg)`;
-});
-card.addEventListener("mouseleave",()=>{
-card.style.transform="rotateX(0) rotateY(0)";
-});
 
-// ===== Theme Toggle =====
-let dark=true;
-function toggleTheme(){
-dark=!dark;
-document.body.style.filter=dark?"":"invert(1) hue-rotate(180deg)";
-}
-
-// ===== Fullscreen Entry =====
+/* ===== FULLSCREEN CINEMATIC ===== */
 window.addEventListener("click",()=>{
 if(!document.fullscreenElement)
 document.documentElement.requestFullscreen().catch(()=>{});
 });
-</script></body>
+
+</script>
+</body>
 </html>
