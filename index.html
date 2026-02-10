@@ -262,13 +262,19 @@ function closeLetter(){
 
 /* ===== MUSIC ===== */
 function playMusic(){
+
  const audio = document.getElementById("song");
 
  if(!audioCtx){
    initBeatGlow();
  }
 
- audio.play();
+ audio.play().then(()=>{
+   startVisualizer();   // 👈 यही missing था
+ }).catch(()=>{
+   startVisualizer();
+ });
+
 }
 
 
@@ -294,7 +300,21 @@ let text="You are my universe ❤️ Happy Birthday 🎂";
 let t=0;
 function type(){
 if(t<text.length){
-typing.innerHTML+=text[t++];
+tyfunction playMusic(){
+
+ const audio = document.getElementById("song");
+
+ if(!audioCtx){
+   initBeatGlow();
+ }
+
+ audio.play().then(()=>{
+   startVisualizer();   // 👈 यही missing था
+ }).catch(()=>{
+   startVisualizer();
+ });
+
+}ping.innerHTML+=text[t++];
 setTimeout(type,60);
 }}
 type();
