@@ -219,13 +219,18 @@ function goFull(){
 document.documentElement.requestFullscreen();
 document.getElementById("letter").style.display="flex";
 }
-
+function openLetter(){
+  document.getElementById("letter").style.display="flex";
+}
 function closeLetter(){
 document.getElementById("letter").style.display="none";
 }
 
 function playMusic(){
-document.getElementById("song").play();
+  const audio = document.getElementById("song");
+  if(audio){
+    audio.play();
+  }
 }
 let images = [
   "photo1.jpg",
