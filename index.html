@@ -408,7 +408,20 @@ card.addEventListener("touchmove",(e)=>{
 
 card.addEventListener("touchend",()=>{
   card.style.transform = "rotateX(0) rotateY(0)";
-});    
+});   
+     // ✍️ Typewriter Message
+let msg = "You are my everything ❤️ Happy Birthday My Love 🎂";
+let i = 0;
+
+function typeWriter(){
+  if(i < msg.length){
+    document.getElementById("typing").innerHTML += msg.charAt(i);
+    i++;
+    setTimeout(typeWriter, 60);
+  }
+}
+
+window.onload = typeWriter;
 </script>
 
 </body>
