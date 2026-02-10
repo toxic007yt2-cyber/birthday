@@ -62,19 +62,18 @@ transition:transform .2s;
   width:50%;
   height:220%;
   background:linear-gradient(
-    120deg,
-    transparent,
-    rgba(255,255,255,.25),
-    transparent
+      120deg,
+      transparent,
+      rgba(255,255,255,.25),
+      transparent
   );
   transform:rotate(25deg);
   transition:.8s;
 }
-.card:hover::before{ left:150%; }
-transform:rotate(25deg);
-transition:.6s;
+
+.card:hover::before{
+  left:150%;
 }
-.card:hover::before{left:140%}
 
 /* ===== IMAGE ===== */
 #slide{
@@ -101,20 +100,30 @@ transition:.3s;
 button:hover{
 transform:scale(1.1);
 }
+/* Light Sweep Effect */
+.card::before{
+  content:"";
+  position:absolute;
+  top:-50%;
+  left:-120%;
+  width:50%;
+  height:220%;
+  background:linear-gradient(
+    120deg,
+    transparent,
+    rgba(255,255,255,.25),
+    transparent
+  );
+  transform:rotate(25deg);
+  transition:.8s;
+}
 
+.card:hover::before{
+  left:150%;
+}
 /* ===== POPUP ===== */
 .popup{
-position:fixed;
-top:0;
-left:0;
-width:100%;
-height:100%;
-display:none;
-align-items:center;
-justify-content:center;
-background:rgba(0,0,0,.7);
-z-index:5;
-}
+
 .popup-box{
 background:white;
 color:black;
