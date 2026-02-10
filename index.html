@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Birthday ❤️</title>
+<title>Ultimate Birthday ❤️</title>
 
 <style>
 body{
@@ -18,7 +18,7 @@ justify-content:center;
 background:linear-gradient(120deg,#1e3c72,#ff4b2b);
 }
 
-/* canvas */
+/* background stars */
 canvas{
 position:fixed;
 top:0;
@@ -36,7 +36,9 @@ text-align:center;
 width:320px;
 border:1px solid rgba(255,255,255,.25);
 box-shadow:0 0 30px #ff4b2b;
+transition:.2s;
 }
+.card:hover{ transform:scale(1.05); }
 
 #slide{
 width:140px;
@@ -46,6 +48,7 @@ object-fit:cover;
 cursor:pointer;
 }
 
+/* buttons */
 button{
 margin-top:12px;
 padding:10px 18px;
@@ -68,13 +71,11 @@ justify-content:center;
 background:rgba(0,0,0,.6);
 z-index:999;
 }
-
 .popup-box{
 background:white;
 color:black;
 padding:25px;
 border-radius:20px;
-max-width:260px;
 }
 
 /* visualizer */
@@ -105,6 +106,13 @@ z-index:999;
 max-width:90%;
 max-height:90%;
 }
+
+/* floating emoji */
+.float{
+position:fixed;
+pointer-events:none;
+font-size:22px;
+}
 </style>
 </head>
 
@@ -113,7 +121,6 @@ max-height:90%;
 <canvas id="stars"></canvas>
 
 <div class="card">
-
 <img id="slide" src="photo1.jpg">
 
 <h2>Happy Birthday Babayyy ❤️</h2>
@@ -127,10 +134,9 @@ max-height:90%;
 
 <audio id="song" src="music.mp3"></audio>
 <audio id="bdayVoice" src="happy.mp3"></audio>
-
 </div>
 
-<!-- LETTER -->
+<!-- LOVE LETTER -->
 <div id="letter" class="popup">
 <div class="popup-box">
 <p>
@@ -179,20 +185,58 @@ function closeLetter(){ letter.style.display="none"; }
 
 /* visualizer */
 const visualizer=document.getElementById("visualizer");
-for(let j=0;j<30;j++){
+for(let i=0;i<30;i++){
 let b=document.createElement("div");
 b.className="bar";
 visualizer.appendChild(b);
 }
 let bars=document.querySelectorAll(".bar");
 
+/* floating hearts on music */
+function heartRain(){
+setInterval(()=>{
+let h=document.createElement("div");
+h.className="float";
+h.innerHTML="❤️";
+h.style.left=Math.random()*100+"vw";
+h.style.top="-20px";
+document.body.appendChild(h);
+h.animate([
+{transform:"translateY(0px)"},
+{transform:`translateY(${window.innerHeight}px)`}
+],{duration:3000})
+.onfinish=()=>h.remove();
+},300);
+}
+
+/* balloons */
+function balloons(){
+setInterval(()=>{
+let b=document.createElement("div");
+b.className="float";
+b.innerHTML="🎈";
+b.style.left=Math.random()*100+"vw";
+b.style.bottom="-20px";
+document.body.appendChild(b);
+b.animate([
+{transform:"translateY(0px)"},
+{transform:"translateY(-110vh)"}
+],{duration:5000})
+.onfinish=()=>b.remove();
+},800);
+}
+
+/* music */
 function playMusic(){
 song.play();
+heartRain();
+balloons();
+
 setInterval(()=>{
 bars.forEach(b=>{
-b.style.height=(Math.random()*40+5)+"px";
+b.style.height=(Math.random()*60+5)+"px";
 });
-},120);
+},100);
 }
 
 /* typing */
@@ -205,20 +249,20 @@ setTimeout(type,50);
 }}
 type();
 
-/* splash */
-function birthdaySplash(){
-for(let i=0;i<80;i++){
-let s=document.createElement("div");
-s.innerHTML="🎊";
-s.style.position="fixed";
-s.style.left=Math.random()*100+"vw";
-s.style.top="-20px";
-document.body.appendChild(s);
-s.animate([
-{transform:"translateY(0px)"},
+/* birthday cake splash */
+function cakeExplosion(){
+for(let i=0;i<60;i++){
+let c=document.createElement("div");
+c.className="float";
+c.innerHTML="🎂";
+c.style.left=Math.random()*100+"vw";
+c.style.top="-20px";
+document.body.appendChild(c);
+c.animate([
+{transform:"translateY(0px) rotate(0deg)"},
 {transform:`translateY(${window.innerHeight}px) rotate(720deg)`}
-],{duration:2000+Math.random()*1000})
-.onfinish=()=>s.remove();
+],{duration:2500})
+.onfinish=()=>c.remove();
 }
 bdayVoice.play().catch(()=>{});
 }
@@ -235,7 +279,7 @@ let diff=target-new Date();
 if(diff<=0){
 count.innerHTML="🎂 TODAY 🎂";
 if(!done){
-birthdaySplash();
+cakeExplosion();
 done=true;
 }
 }else{
@@ -253,7 +297,7 @@ let ctx=c.getContext("2d");
 c.width=innerWidth;
 c.height=innerHeight;
 let stars=[];
-for(let s=0;s<120;s++)
+for(let i=0;i<120;i++)
 stars.push({x:Math.random()*c.width,y:Math.random()*c.height});
 
 setInterval(()=>{
