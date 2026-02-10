@@ -2,8 +2,6 @@
 <head>
 <meta charset="UTF-8">
 <title>Ultimate Birthday Experience ❤️</title><style>
-
-/* ===== BASE ===== */
 body{
 margin:0;
 font-family:'Segoe UI',sans-serif;
@@ -13,19 +11,16 @@ overflow:hidden;
 display:flex;
 align-items:center;
 justify-content:center;
-
 background:linear-gradient(270deg,#ff416c,#1e3c72,#2a5298,#ff4b2b);
 background-size:800% 800%;
 animation:bgMove 20s ease infinite;
 }
-
 @keyframes bgMove{
 0%{background-position:0% 50%}
 50%{background-position:100% 50%}
 100%{background-position:0% 50%}
 }
 
-/* ===== CANVAS LAYERS ===== */
 canvas{
 position:fixed;
 top:0;
@@ -33,7 +28,6 @@ left:0;
 z-index:0;
 }
 
-/* ===== MAIN CARD ===== */
 .card{
 position:relative;
 z-index:2;
@@ -44,48 +38,31 @@ border-radius:20px;
 text-align:center;
 width:320px;
 border:1px solid rgba(255,255,255,.25);
-
-box-shadow:
-0 0 25px #ff4b2b,
-0 0 45px #ff416c,
-0 0 60px rgba(255,255,255,.2);
-
+box-shadow:0 0 25px #ff4b2b,0 0 45px #ff416c;
 transition:transform .2s;
 }
 
-/* Light sweep */
 .card::before{
-  content:"";
-  position:absolute;
-  top:-50%;
-  left:-80%;
-  width:25%;
+content:"";
+position:absolute;
+top:-50%;
+left:-80%;
+width:25%;
 height:140%;
-  background:linear-gradient(
-      120deg,
-      transparent,
-      rgba(255,255,255,.25),
-      transparent
-  );
-  transform:rotate(25deg);
-  transition:.8s;
+background:linear-gradient(120deg,transparent,rgba(255,255,255,.25),transparent);
+transform:rotate(25deg);
+transition:.8s;
 }
+.card:hover::before{ left:150%; }
 
-.card:hover::before{
-  left:150%;
-}
-
-/* ===== IMAGE ===== */
 #slide{
 width:140px;
 height:140px;
 border-radius:15px;
 object-fit:cover;
 cursor:pointer;
-transition:.3s;
 }
 
-/* ===== BUTTONS ===== */
 button{
 margin-top:12px;
 padding:10px 18px;
@@ -95,58 +72,32 @@ background:linear-gradient(45deg,#ff4b2b,#ff416c);
 color:white;
 font-weight:bold;
 cursor:pointer;
-transition:.3s;
-}
-button:hover{
-transform:scale(1.1);
-}
-/* Light Sweep Effect */
-.card::before{
-  content:"";
-  position:absolute;
-  top:-50%;
-  left:-120%;
-  width:50%;
-  height:220%;
-  background:linear-gradient(
-    120deg,
-    transparent,
-    rgba(255,255,255,.25),
-    transparent
-  );
-  transform:rotate(25deg);
-  transition:.8s;
 }
 
-.card:hover::before{
-  left:150%;
-}
-/* ===== POPUP ===== */
 .popup{
-  position:fixed;
-  top:0;
-  left:0;
-  width:100%;
-  height:100%;
-  display:none;
-  align-items:center;
-  justify-content:center;
-  background:rgba(0,0,0,0.55);
-  z-index:999;
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+display:none;
+align-items:center;
+justify-content:center;
+background:rgba(0,0,0,.55);
+z-index:999;
 }
-  .popup-box{
+.popup-box{
 background:white;
 color:black;
 padding:25px;
 border-radius:20px;
 }
 
-/* ===== VISUALIZER ===== */
 #visualizer{
 display:flex;
-justify-content:center;
 gap:4px;
 margin-top:10px;
+justify-content:center;
 }
 .bar{
 width:4px;
@@ -154,7 +105,6 @@ height:10px;
 background:white;
 }
 
-/* ===== FULLSCREEN VIEWER ===== */
 #viewer{
 position:fixed;
 top:0;
@@ -171,315 +121,111 @@ z-index:6;
 max-width:90%;
 max-height:90%;
 }
+</style></head><body><canvas id="stars"></canvas>
 
-/* ===== TRAIL ===== */
-.trail{
-position:fixed;
-pointer-events:none;
-font-size:18px;
-animation:fade 1s forwards;
-}
-@keyframes fade{
-to{opacity:0;transform:translateY(-20px)}
-}
-
-</style></head><body><!-- Particle canvas --><canvas id="stars"></canvas>
-
-<div class="card"><img id="slide" src="photo1.jpg"><h2>Happy Birthday Babayyy ❤️</h2>
+<div class="card">
+<img id="slide" src="photo1.jpg">
+<h2>Happy Birthday Babayyy ❤️</h2>
 <p id="typing"></p><button onclick="openLetter()">💌 Love Letter</button>
 <button onclick="playMusic()">🎵 Play</button>
 
 <div id="visualizer"></div>
 <div id="count"></div><audio id="song" src="music.mp3"></audio>
 
-</div><!-- POPUPS --><div id="letter" class="popup">
+</div><div id="letter" class="popup">
 <div class="popup-box">
 <h2>My Love ❤️</h2>
-<p>Happy Birthday, my soulmate! Every moment with you is magical. I'm SO lucky to have you in my lifel Wishing you endless love, joy, and happiness today and always!</p>
+<p>Happy Birthday! You make my life magical ✨</p>
 <button onclick="closeLetter()">Close</button>
 </div>
-</div><!-- IMAGE VIEWER --><div id="viewer" onclick="this.style.display='none'">
+</div><div id="viewer" onclick="this.style.display='none'">
 <img id="viewImg">
-<script>
+</div><script>
 
-/* ===== IMAGE SLIDESHOW (13 photos) ===== */
-let images=[
+/* Slideshow */
+const slide=document.getElementById("slide");
+const viewer=document.getElementById("viewer");
+const viewImg=document.getElementById("viewImg");
+
+const images=[
 "photo1.jpg","photo2.jpg","photo3.jpg","photo4.jpg",
 "photo5.jpg","photo6.jpg","photo7.jpg","photo8.jpg",
-"photo9.jpg","photo10.jpg","photo11.jpg","photo12.jpg",
-"photo13.jpg"
+"photo9.jpg","photo10.jpg","photo11.jpg","photo12.jpg","photo13.jpg"
 ];
 
-let idx=0;
+let i=0;
 setInterval(()=>{
-idx=(idx+1)%images.length;
-slide.src=images[idx];
+i=(i+1)%images.length;
+slide.src=images[i];
 },2000);
 
-/* Click zoom viewer */
 slide.onclick=()=>{
 viewImg.src=slide.src;
 viewer.style.display="flex";
 };
 
+/* Popup */
+const letter=document.getElementById("letter");
+function openLetter(){ letter.style.display="flex"; }
+function closeLetter(){ letter.style.display="none"; }
 
-/* ===== LOVE LETTER ===== */
-function openLetter(){
-  letter.style.display="flex";
-
-  letter.animate(
-    [
-      {transform:"scale(0.3)", opacity:0},
-      {transform:"scale(1.2)", opacity:1},
-      {transform:"scale(0.9)"},
-      {transform:"scale(1.05)"},
-      {transform:"scale(1)"}
-    ],
-    {
-      duration:700,
-      easing:"cubic-bezier(.34,1.56,.64,1)"
-    }
-  );
-
-  confettiBurst();
-}
-
-function closeLetter(){
-  letter.animate(
-    [
-      {transform:"scale(1)", opacity:1},
-      {transform:"scale(0.5)", opacity:0}
-    ],
-    {
-      duration:250,
-      easing:"ease-in"
-    }
-  ).onfinish=()=>{
-    letter.style.display="none";
-  };
-}
-
-
-/* ===== MUSIC ===== */
-function playMusic(){
-
- const audio = document.getElementById("song");
- const viz = document.getElementById("visualizer");
-
- if(!audio || !viz){
-   console.log("Missing elements");
-   return;
- }
-
- if(!audioCtx){
-   initBeatGlow();
- }
-
- audio.play().catch(()=>{});
-
- startVisualizer(); // force start
-
-}
-
-
-/* ===== VISUALIZER ===== */
-for(let i=0;i<30;i++){
+/* Visualizer */
+const visualizer=document.getElementById("visualizer");
+for(let j=0;j<30;j++){
 let b=document.createElement("div");
 b.className="bar";
 visualizer.appendChild(b);
 }
 let bars=document.querySelectorAll(".bar");
 
-function startVisualizer(){
+function playMusic(){
+song.play();
 setInterval(()=>{
-bars.forEach(bar=>{
-bar.style.height=(Math.random()*40+5)+"px";
+bars.forEach(b=>{
+b.style.height=(Math.random()*40+5)+"px";
 });
 },120);
 }
 
-
-/* ===== TYPEWRITER ===== */
-let text="You are my universe ❤️ Happy Birthday 🎂";
-let t=0;
+/* Type text */
+let txt="You are my universe ❤️ Happy Birthday 🎂";
+let k=0;
 function type(){
-if(t<text.length){
-tyfunction playMusic(){
-
- const audio = document.getElementById("song");
-
- if(!audioCtx){
-   initBeatGlow();
- }
-
- audio.play().then(()=>{
-   startVisualizer();   // 👈 यही missing था
- }).catch(()=>{
-   startVisualizer();
- });
-
-}ping.innerHTML+=text[t++];
-setTimeout(type,60);
+if(k<txt.length){
+typing.innerHTML+=txt[k++];
+setTimeout(type,50);
 }}
 type();
 
-
-/* ===== COUNTDOWN ===== */
+/* Countdown */
 let target=new Date();
 target.setDate(12);
 target.setHours(0,0,0,0);
-
 setInterval(()=>{
 let diff=target-new Date();
-if(diff<=0){
-count.innerHTML="🎂 TODAY 🎂";
-fireworks();
-}else{
+if(diff>0){
 let d=Math.floor(diff/86400000);
 let h=Math.floor(diff%86400000/3600000);
-let m=Math.floor(diff%3600000/60000);
-let s=Math.floor(diff%60000/1000);
-count.innerHTML=`${d}d ${h}h ${m}m ${s}s ❤️`;
-}
+count.innerHTML=d+"d "+h+"h ❤️";
+}else count.innerHTML="🎂 TODAY 🎂";
 },1000);
 
-
-/* ===== HEART TRAIL ===== */
-document.addEventListener("mousemove",(e)=>{
-let t=document.createElement("div");
-t.className="trail";
-t.innerHTML="❤️";
-t.style.left=e.clientX+"px";
-t.style.top=e.clientY+"px";
-document.body.appendChild(t);
-setTimeout(()=>t.remove(),800);
-});
-
-
-/* ===== CARD TILT ===== */
-let card=document.querySelector(".card");
-card.addEventListener("mousemove",(e)=>{
-let r=card.getBoundingClientRect();
-let x=e.clientX-r.left;
-let y=e.clientY-r.top;
-card.style.transform=
-`perspective(600px)
-rotateX(${-(y/r.height-.5)*15}deg)
-rotateY(${(x/r.width-.5)*15}deg)`;
-});
-card.addEventListener("mouseleave",()=>{
-card.style.transform="rotateX(0) rotateY(0)";
-});
-
-
-/* ===== PARTICLE STARS ===== */
+/* Stars */
 let c=document.getElementById("stars");
 let ctx=c.getContext("2d");
 c.width=innerWidth;
 c.height=innerHeight;
 let stars=[];
-for(let i=0;i<120;i++)
-stars.push({x:Math.random()*c.width,y:Math.random()*c.height});
-
+for(let s=0;s<120;s++)stars.push({x:Math.random()*c.width,y:Math.random()*c.height});
 setInterval(()=>{
 ctx.clearRect(0,0,c.width,c.height);
 ctx.fillStyle="white";
-stars.forEach(s=>{
-ctx.fillRect(s.x,s.y,2,2);
-s.y+=0.4;
-if(s.y>c.height)s.y=0;
+stars.forEach(st=>{
+ctx.fillRect(st.x,st.y,2,2);
+st.y+=0.4;
+if(st.y>c.height)st.y=0;
 });
 },30);
 
-
-/* ===== CONFETTI ===== */
-function confettiBurst(){
-for(let i=0;i<40;i++){
-let d=document.createElement("div");
-d.innerHTML="🎉";
-d.style.position="fixed";
-d.style.left=Math.random()*100+"vw";
-d.style.top="-20px";
-document.body.appendChild(d);
-setTimeout(()=>d.remove(),2000);
-}
-}
-
-
-/* ===== FIREWORKS ===== */
-function fireworks(){
-for(let i=0;i<20;i++){
-let f=document.createElement("div");
-f.innerHTML="✨";
-f.style.position="fixed";
-f.style.left=Math.random()*100+"vw";
-f.style.top=Math.random()*100+"vh";
-document.body.appendChild(f);
-setTimeout(()=>f.remove(),1500);
-}
-}
-
-
-/* ===== KEYBOARD SHORTCUTS ===== */
-document.addEventListener("keydown",(e)=>{
-if(e.key==="m") playMusic();
-if(e.key==="l") openLetter();
-if(e.key==="f") fireworks();
-});
-
-
-/* ===== FULLSCREEN CINEMATIC ===== */
-window.addEventListener("click",()=>{
-if(!document.fullscreenElement)
-document.documentElement.requestFullscreen().catch(()=>{});
-});
-/* ===== MUSIC BEAT GLOW ===== */
-
-let audioCtx;
-let analyser;
-let source;
-let dataArray;
-
-function initBeatGlow(){
-
- const audio = document.getElementById("song");
-
- audioCtx = new (window.AudioContext || window.webkitAudioContext)();
- analyser = audioCtx.createAnalyser();
-
- source = audioCtx.createMediaElementSource(audio);
- source.connect(analyser);
- analyser.connect(audioCtx.destination);
-
- analyser.fftSize = 64;
-
- const bufferLength = analyser.frequencyBinCount;
- dataArray = new Uint8Array(bufferLength);
-
- beatLoop();
-}
-
-function beatLoop(){
-
- analyser.getByteFrequencyData(dataArray);
-
- let sum = 0;
- for(let i=0;i<dataArray.length;i++){
-   sum += dataArray[i];
- }
-
- let avg = sum / dataArray.length;
-
- // Glow strength
- let glow = avg / 8;
-
- document.querySelector(".card").style.boxShadow =
- `0 0 ${20+glow}px rgba(255,70,100,.7),
-  0 0 ${40+glow}px rgba(255,70,100,.5),
-  0 0 ${60+glow}px rgba(255,255,255,.2)`;
-
- requestAnimationFrame(beatLoop);
-}
-</script>
-</body>
+</script></body>
 </html>
