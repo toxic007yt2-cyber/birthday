@@ -404,7 +404,53 @@ window.addEventListener("click",()=>{
 if(!document.fullscreenElement)
 document.documentElement.requestFullscreen().catch(()=>{});
 });
+/* ===== MUSIC BEAT GLOW ===== */
 
+let audioCtx;
+let analyser;
+let source;
+let dataArray;
+
+function initBeatGlow(){
+
+ const audio = document.getElementById("song");
+
+ audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+ analyser = audioCtx.createAnalyser();
+
+ source = audioCtx.createMediaElementSource(audio);
+ source.connect(analyser);
+ analyser.connect(audioCtx.destination);
+
+ analyser.fftSize = 64;
+
+ const bufferLength = analyser.frequencyBinCount;
+ dataArray = new Uint8Array(bufferLength);
+
+ beatLoop();
+}
+
+function beatLoop(){
+
+ analyser.getByteFrequencyData(dataArray);
+
+ let sum = 0;
+ for(let i=0;i<dataArray.length;i++){
+   sum += dataArray[i];
+ }
+
+ let avg = sum / dataArray.length;
+
+ // Glow strength
+ let glow = avg / 8;
+
+ document.querySelector(".card").style.boxShadow =
+ `0 0 ${20+glow}px rgba(255,70,100,.7),
+  0 0 ${40+glow}px rgba(255,70,100,.5),
+  0 0 ${60+glow}px rgba(255,255,255,.2)`;
+
+ requestAnimationFrame(beatLoop);
+}
 </script>
 </body>
 </html>
