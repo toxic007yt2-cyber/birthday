@@ -1,45 +1,41 @@
-<!DOCTYPE html><html lang="en">
+<!DOCTYPE html>
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Ultimate Birthday ❤️</title><style>
+<title>Birthday ❤️</title>
+
+<style>
 body{
 margin:0;
-font-family:'Segoe UI',sans-serif;
+font-family:sans-serif;
 color:white;
 height:100vh;
 overflow:hidden;
 display:flex;
 align-items:center;
 justify-content:center;
-background:linear-gradient(270deg,#ff416c,#1e3c72,#2a5298,#ff4b2b);
-background-size:800% 800%;
-animation:bgMove 20s ease infinite;
-}
-@keyframes bgMove{
-0%{background-position:0% 50%}
-50%{background-position:100% 50%}
-100%{background-position:0% 50%}
+background:linear-gradient(120deg,#1e3c72,#ff4b2b);
 }
 
+/* canvas */
 canvas{
 position:fixed;
 top:0;
 left:0;
-z-index:0;
+z-index:-1;
 }
 
+/* card */
 .card{
-position:relative;
-z-index:2;
 background:rgba(255,255,255,.12);
-backdrop-filter:blur(20px);
+backdrop-filter:blur(18px);
 padding:30px;
 border-radius:20px;
 text-align:center;
 width:320px;
 border:1px solid rgba(255,255,255,.25);
-box-shadow:0 0 25px #ff4b2b,0 0 45px #ff416c;
+box-shadow:0 0 30px #ff4b2b;
 }
 
 #slide{
@@ -61,28 +57,30 @@ font-weight:bold;
 cursor:pointer;
 }
 
+/* popup */
 .popup{
 position:fixed;
-top:0;
-left:0;
-width:100%;
-height:100%;
+top:0;left:0;
+width:100%;height:100%;
 display:none;
 align-items:center;
 justify-content:center;
-background:rgba(0,0,0,.55);
+background:rgba(0,0,0,.6);
 z-index:999;
 }
+
 .popup-box{
 background:white;
 color:black;
 padding:25px;
 border-radius:20px;
+max-width:260px;
 }
 
+/* visualizer */
 #visualizer{
 display:flex;
-gap:4px;
+gap:3px;
 margin-top:10px;
 justify-content:center;
 }
@@ -92,36 +90,49 @@ height:10px;
 background:white;
 }
 
+/* viewer */
 #viewer{
 position:fixed;
-top:0;
-left:0;
-width:100%;
-height:100%;
+top:0;left:0;
+width:100%;height:100%;
 display:none;
-align-items:center;
 justify-content:center;
+align-items:center;
 background:black;
-z-index:6;
+z-index:999;
 }
 #viewer img{
 max-width:90%;
 max-height:90%;
 }
-</style></head><body><canvas id="stars"></canvas>
+</style>
+</head>
+
+<body>
+
+<canvas id="stars"></canvas>
 
 <div class="card">
-<img id="slide" src="photo1.jpg"><h2>Happy Birthday Babayyy ❤️</h2>
-<p id="typing"></p><button onclick="openLetter()">💌 Love Letter</button>
+
+<img id="slide" src="photo1.jpg">
+
+<h2>Happy Birthday Babayyy ❤️</h2>
+<p id="typing"></p>
+
+<button onclick="openLetter()">💌 Love Letter</button>
 <button onclick="playMusic()">🎵 Play</button>
 
 <div id="visualizer"></div>
-<div id="count"></div><audio id="song" src="music.mp3"></audio>
-<audio id="bdayVoice" src="happybirthday.mp3"></audio>
+<div id="count"></div>
 
-</div><div id="letter" class="popup">
+<audio id="song" src="music.mp3"></audio>
+<audio id="bdayVoice" src="happy.mp3"></audio>
+
+</div>
+
+<!-- LETTER -->
+<div id="letter" class="popup">
 <div class="popup-box">
-<h2>My Love ❤️</h2>
 <p>
 Pass nahi ho firr bhi Tumse pyaar karte hai,<br>
 Dekhkar tasveer tumhari Tumhi ko yaad karte hai,<br>
@@ -130,11 +141,16 @@ Tere se milne ki hi Fariyaad karte hai ❤️
 </p>
 <button onclick="closeLetter()">Close</button>
 </div>
-</div><div id="viewer" onclick="this.style.display='none'">
-<img id="viewImg">
-</div><script>
+</div>
 
-/* SLIDESHOW */
+<!-- VIEWER -->
+<div id="viewer" onclick="this.style.display='none'">
+<img id="viewImg">
+</div>
+
+<script>
+
+/* slideshow */
 const slide=document.getElementById("slide");
 const viewer=document.getElementById("viewer");
 const viewImg=document.getElementById("viewImg");
@@ -145,10 +161,10 @@ const images=[
 "photo9.jpg","photo10.jpg","photo11.jpg","photo12.jpg","photo13.jpg"
 ];
 
-let i=0;
+let idx=0;
 setInterval(()=>{
-i=(i+1)%images.length;
-slide.src=images[i];
+idx=(idx+1)%images.length;
+slide.src=images[idx];
 },2000);
 
 slide.onclick=()=>{
@@ -156,12 +172,12 @@ viewImg.src=slide.src;
 viewer.style.display="flex";
 };
 
-/* POPUP */
+/* popup */
 const letter=document.getElementById("letter");
 function openLetter(){ letter.style.display="flex"; }
 function closeLetter(){ letter.style.display="none"; }
 
-/* VISUALIZER */
+/* visualizer */
 const visualizer=document.getElementById("visualizer");
 for(let j=0;j<30;j++){
 let b=document.createElement("div");
@@ -179,7 +195,7 @@ b.style.height=(Math.random()*40+5)+"px";
 },120);
 }
 
-/* TYPE TEXT */
+/* typing */
 let txt="You are my universe ❤️ Happy Birthday 🎂";
 let k=0;
 function type(){
@@ -189,7 +205,7 @@ setTimeout(type,50);
 }}
 type();
 
-/* COUNTDOWN + SPLASH */
+/* splash */
 function birthdaySplash(){
 for(let i=0;i<80;i++){
 let s=document.createElement("div");
@@ -197,7 +213,6 @@ s.innerHTML="🎊";
 s.style.position="fixed";
 s.style.left=Math.random()*100+"vw";
 s.style.top="-20px";
-s.style.fontSize="20px";
 document.body.appendChild(s);
 s.animate([
 {transform:"translateY(0px)"},
@@ -205,26 +220,34 @@ s.animate([
 ],{duration:2000+Math.random()*1000})
 .onfinish=()=>s.remove();
 }
-document.getElementById("bdayVoice").play().catch(()=>{});
+bdayVoice.play().catch(()=>{});
 }
 
+/* countdown */
+let done=false;
 let target=new Date();
 target.setDate(12);
 target.setHours(0,0,0,0);
 
 setInterval(()=>{
 let diff=target-new Date();
+
 if(diff<=0){
 count.innerHTML="🎂 TODAY 🎂";
+if(!done){
 birthdaySplash();
+done=true;
+}
 }else{
 let d=Math.floor(diff/86400000);
 let h=Math.floor(diff%86400000/3600000);
-count.innerHTML=d+"d "+h+"h ❤️";
+let m=Math.floor(diff%3600000/60000);
+let s=Math.floor(diff%60000/1000);
+count.innerHTML=`${d}d ${h}h ${m}m ${s}s ❤️`;
 }
 },1000);
 
-/* STARS */
+/* stars */
 let c=document.getElementById("stars");
 let ctx=c.getContext("2d");
 c.width=innerWidth;
