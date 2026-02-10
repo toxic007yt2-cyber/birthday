@@ -229,10 +229,16 @@ function openLetter(){
 
   letter.animate(
     [
-      {transform:"scale(0.7)", opacity:0},
-      {transform:"scale(1)", opacity:1}
+      {transform:"scale(0.3)", opacity:0},
+      {transform:"scale(1.2)", opacity:1},
+      {transform:"scale(0.9)"},
+      {transform:"scale(1.05)"},
+      {transform:"scale(1)"}
     ],
-    {duration:400, easing:"ease-out"}
+    {
+      duration:700,
+      easing:"cubic-bezier(.34,1.56,.64,1)"
+    }
   );
 
   confettiBurst();
@@ -242,10 +248,13 @@ function closeLetter(){
   letter.animate(
     [
       {transform:"scale(1)", opacity:1},
-      {transform:"scale(0.7)", opacity:0}
+      {transform:"scale(0.5)", opacity:0}
     ],
-    {duration:300, easing:"ease-in"}
-  ).onfinish = ()=>{
+    {
+      duration:250,
+      easing:"ease-in"
+    }
+  ).onfinish=()=>{
     letter.style.display="none";
   };
 }
