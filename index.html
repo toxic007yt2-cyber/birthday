@@ -310,7 +310,21 @@ document.addEventListener("mousemove", function(e){
   document.body.appendChild(t);
 
   setTimeout(()=>t.remove(), 1000);
-});     
+});   
+  // ❤️ Touch Trail Hearts (Mobile)
+document.addEventListener("touchmove", function(e){
+
+    let t = document.createElement("div");
+    t.className = "trail";
+    t.innerHTML = "❤️";
+
+    t.style.left = e.touches[0].clientX + "px";
+    t.style.top  = e.touches[0].clientY + "px";
+
+    document.body.appendChild(t);
+
+    setTimeout(()=>t.remove(), 1000);
+});   
 </script>
 
 </body>
