@@ -264,16 +264,20 @@ function closeLetter(){
 function playMusic(){
 
  const audio = document.getElementById("song");
+ const viz = document.getElementById("visualizer");
+
+ if(!audio || !viz){
+   console.log("Missing elements");
+   return;
+ }
 
  if(!audioCtx){
    initBeatGlow();
  }
 
- audio.play().then(()=>{
-   startVisualizer();   // 👈 यही missing था
- }).catch(()=>{
-   startVisualizer();
- });
+ audio.play().catch(()=>{});
+
+ startVisualizer(); // force start
 
 }
 
