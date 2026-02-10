@@ -5,6 +5,18 @@
 <title>Happy Birthday Babayyy ❤️</title>
 
 <style>
+ .trail{
+  position: fixed;
+  pointer-events:none;
+  font-size:18px;
+  animation: trailFade 1s linear forwards;
+  z-index:5;
+}
+
+@keyframes trailFade{
+  0%{opacity:1; transform:translateY(0) scale(1);}
+  100%{opacity:0; transform:translateY(-20px) scale(0.5);}
+}
   .heart{
   pointer-events:none;
   z-index:0;
@@ -288,6 +300,17 @@ document.getElementById("slide").onclick=function(){
 function openLetter(){
   alert("I love you more than words can say ❤️\nYou make my life beautiful 🌸");
 }
+ // ❤️ Mouse Trail Hearts
+document.addEventListener("mousemove", function(e){
+  let t = document.createElement("div");
+  t.className = "trail";
+  t.innerHTML = "❤️";
+  t.style.left = e.clientX + "px";
+  t.style.top = e.clientY + "px";
+  document.body.appendChild(t);
+
+  setTimeout(()=>t.remove(), 1000);
+});     
 </script>
 
 </body>
