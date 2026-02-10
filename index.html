@@ -45,6 +45,8 @@ color:white;
   text-align:center;
   box-shadow: 0 15px 40px rgba(0,0,0,0.25), 0 0 35px rgba(255,0,120,0.35);
   width:280px;
+ transform-style: preserve-3d;
+transition: transform 0.2s ease;
   border: 1px solid rgba(255,255,255,0.25);
   animation: pop 0.6s ease;
 }
@@ -321,6 +323,44 @@ document.addEventListener("touchmove",(e)=>{
   let touch = e.touches[0];
   spawnHeart(touch.clientX,touch.clientY);
 });
+ /* 🌀 Card Tilt Effect */
+let card = document.querySelector(".card");
+
+card.addEventListener("mousemove",(e)=>{
+  let rect = card.getBoundingClientRect();
+  let x = e.clientX - rect.left;
+  let y = e.clientY - rect.top;
+
+  let rotateY = (x / rect.width - 0.5) * 20;
+  let rotateX = -(y / rect.height - 0.5) * 20;
+
+  card.style.transform =
+    `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+});
+
+card.addEventListener("mouseleave",()=>{
+  card.style.transform = "rotateX(0) rotateY(0)";
+});
+
+
+/* Mobile Tilt */
+card.addEventListener("touchmove",(e)=>{
+  let touch = e.touches[0];
+  let rect = card.getBoundingClientRect();
+
+  let x = touch.clientX - rect.left;
+  let y = touch.clientY - rect.top;
+
+  let rotateY = (x / rect.width - 0.5) * 20;
+  let rotateX = -(y / rect.height - 0.5) * 20;
+
+  card.style.transform =
+    `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+});
+
+card.addEventListener("touchend",()=>{
+  card.style.transform = "rotateX(0) rotateY(0)";
+});    
 </script>
 
 </body>
