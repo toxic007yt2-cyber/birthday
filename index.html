@@ -108,7 +108,16 @@ to{transform:translateY(-10vh);}
   border-radius:20px;
   text-align:center;
 }
-  </style>
+@keyframes musicPulse{
+0%{transform:scale(1);}
+50%{transform:scale(1.08);}
+100%{transform:scale(1);}
+}
+
+button:last-of-type{
+animation: musicPulse 2s infinite;
+}
+</style>
 </head>
 
 <body>
