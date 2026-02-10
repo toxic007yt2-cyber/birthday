@@ -262,8 +262,13 @@ function closeLetter(){
 
 /* ===== MUSIC ===== */
 function playMusic(){
-song.play();
-startVisualizer();
+ const audio = document.getElementById("song");
+
+ if(!audioCtx){
+   initBeatGlow();
+ }
+
+ audio.play();
 }
 
 
