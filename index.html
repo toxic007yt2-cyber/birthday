@@ -421,7 +421,11 @@ function typeWriter(){
   }
 }
 
-window.onload = typeWriter;
+window.addEventListener("load", ()=>{
+    if(typeof typeWriter === "function"){
+        typeWriter();
+    }
+});
      /* 🎬 Auto Fullscreen Cinematic Start */
 window.addEventListener("click", ()=>{
     if(!document.fullscreenElement){
