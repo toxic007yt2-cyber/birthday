@@ -225,11 +225,29 @@ viewer.style.display="flex";
 
 /* ===== LOVE LETTER ===== */
 function openLetter(){
-letter.style.display="flex";
-confettiBurst();
+  letter.style.display="flex";
+
+  letter.animate(
+    [
+      {transform:"scale(0.7)", opacity:0},
+      {transform:"scale(1)", opacity:1}
+    ],
+    {duration:400, easing:"ease-out"}
+  );
+
+  confettiBurst();
 }
+
 function closeLetter(){
-letter.style.display="none";
+  letter.animate(
+    [
+      {transform:"scale(1)", opacity:1},
+      {transform:"scale(0.7)", opacity:0}
+    ],
+    {duration:300, easing:"ease-in"}
+  ).onfinish = ()=>{
+    letter.style.display="none";
+  };
 }
 
 
