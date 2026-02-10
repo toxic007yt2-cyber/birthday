@@ -3,7 +3,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Ultimate Birthday ❤️</title><style>
-
 body{
 margin:0;
 font-family:'Segoe UI',sans-serif;
@@ -17,7 +16,6 @@ background:linear-gradient(270deg,#ff416c,#1e3c72,#2a5298,#ff4b2b);
 background-size:800% 800%;
 animation:bgMove 20s ease infinite;
 }
-
 @keyframes bgMove{
 0%{background-position:0% 50%}
 50%{background-position:100% 50%}
@@ -42,21 +40,7 @@ text-align:center;
 width:320px;
 border:1px solid rgba(255,255,255,.25);
 box-shadow:0 0 25px #ff4b2b,0 0 45px #ff416c;
-transition:transform .2s;
 }
-
-.card::before{
-content:"";
-position:absolute;
-top:-50%;
-left:-80%;
-width:25%;
-height:140%;
-background:linear-gradient(120deg,transparent,rgba(255,255,255,.25),transparent);
-transform:rotate(25deg);
-transition:.8s;
-}
-.card:hover::before{ left:150%; }
 
 #slide{
 width:140px;
@@ -89,7 +73,6 @@ justify-content:center;
 background:rgba(0,0,0,.55);
 z-index:999;
 }
-
 .popup-box{
 background:white;
 color:black;
@@ -121,12 +104,10 @@ justify-content:center;
 background:black;
 z-index:6;
 }
-
 #viewer img{
 max-width:90%;
 max-height:90%;
 }
-
 </style></head><body><canvas id="stars"></canvas>
 
 <div class="card">
@@ -136,11 +117,17 @@ max-height:90%;
 
 <div id="visualizer"></div>
 <div id="count"></div><audio id="song" src="music.mp3"></audio>
+<audio id="bdayVoice" src="happybirthday.mp3"></audio>
 
 </div><div id="letter" class="popup">
 <div class="popup-box">
 <h2>My Love ❤️</h2>
-<p>You make my world magical ✨</p>
+<p>
+Pass nahi ho firr bhi Tumse pyaar karte hai,<br>
+Dekhkar tasveer tumhari Tumhi ko yaad karte hai,<br>
+Dil mein itni tadap Hai ki harr waqt,<br>
+Tere se milne ki hi Fariyaad karte hai ❤️
+</p>
 <button onclick="closeLetter()">Close</button>
 </div>
 </div><div id="viewer" onclick="this.style.display='none'">
@@ -202,17 +189,39 @@ setTimeout(type,50);
 }}
 type();
 
-/* COUNTDOWN */
+/* COUNTDOWN + SPLASH */
+function birthdaySplash(){
+for(let i=0;i<80;i++){
+let s=document.createElement("div");
+s.innerHTML="🎊";
+s.style.position="fixed";
+s.style.left=Math.random()*100+"vw";
+s.style.top="-20px";
+s.style.fontSize="20px";
+document.body.appendChild(s);
+s.animate([
+{transform:"translateY(0px)"},
+{transform:`translateY(${window.innerHeight}px) rotate(720deg)`}
+],{duration:2000+Math.random()*1000})
+.onfinish=()=>s.remove();
+}
+document.getElementById("bdayVoice").play().catch(()=>{});
+}
+
 let target=new Date();
 target.setDate(12);
 target.setHours(0,0,0,0);
+
 setInterval(()=>{
 let diff=target-new Date();
-if(diff>0){
+if(diff<=0){
+count.innerHTML="🎂 TODAY 🎂";
+birthdaySplash();
+}else{
 let d=Math.floor(diff/86400000);
 let h=Math.floor(diff%86400000/3600000);
 count.innerHTML=d+"d "+h+"h ❤️";
-}else count.innerHTML="🎂 TODAY 🎂";
+}
 },1000);
 
 /* STARS */
@@ -234,5 +243,6 @@ if(st.y>c.height)st.y=0;
 });
 },30);
 
-</script></body>
+</script>
+</body>
 </html>
