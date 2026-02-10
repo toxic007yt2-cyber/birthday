@@ -422,6 +422,12 @@ function typeWriter(){
 }
 
 window.onload = typeWriter;
+     /* 🎬 Auto Fullscreen Cinematic Start */
+window.addEventListener("click", ()=>{
+    if(!document.fullscreenElement){
+        document.documentElement.requestFullscreen().catch(()=>{});
+    }
+});
 </script>
 
 </body>
