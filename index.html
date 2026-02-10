@@ -300,31 +300,27 @@ document.getElementById("slide").onclick=function(){
 function openLetter(){
   alert("I love you more than words can say ❤️\nYou make my life beautiful 🌸");
 }
- // ❤️ Mouse Trail Hearts
-document.addEventListener("mousemove", function(e){
+ // ❤️ Smooth Mouse + Touch Trail Hearts
+function spawnHeart(x,y){
   let t = document.createElement("div");
   t.className = "trail";
   t.innerHTML = "❤️";
-  t.style.left = e.clientX + "px";
-  t.style.top = e.clientY + "px";
+  t.style.left = (x-8) + "px";
+  t.style.top = (y-8) + "px";
   document.body.appendChild(t);
+  setTimeout(()=>t.remove(),900);
+}
 
-  setTimeout(()=>t.remove(), 1000);
-});   
-  // ❤️ Touch Trail Hearts (Mobile)
-document.addEventListener("touchmove", function(e){
+// Mouse
+document.addEventListener("mousemove",(e)=>{
+  spawnHeart(e.clientX,e.clientY);
+});
 
-    let t = document.createElement("div");
-    t.className = "trail";
-    t.innerHTML = "❤️";
-
-    t.style.left = e.touches[0].clientX + "px";
-    t.style.top  = e.touches[0].clientY + "px";
-
-    document.body.appendChild(t);
-
-    setTimeout(()=>t.remove(), 1000);
-});   
+// Touch (Mobile)
+document.addEventListener("touchmove",(e)=>{
+  let touch = e.touches[0];
+  spawnHeart(touch.clientX,touch.clientY);
+});
 </script>
 
 </body>
