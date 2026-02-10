@@ -317,12 +317,15 @@ function launchConfetti(){
 }
 
 let oldPopup = document.getElementById("pop");
-let observer = new MutationObserver(()=>{
-    if(oldPopup.style.display==="flex"){
-        launchConfetti();
-    }
-});
-observer.observe(oldPopup,{attributes:true});
+
+if(oldPopup){
+    let observer = new MutationObserver(()=>{
+        if(oldPopup.style.display === "flex"){
+            launchConfetti();
+        }
+    });
+    observer.observe(oldPopup,{attributes:true});
+}
         /* ❤️ Typing Love Message */
 let msg = "You are my everything ❤️ Happy Birthday My Love 🎂";
 let i = 0;
