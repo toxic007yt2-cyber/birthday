@@ -309,7 +309,99 @@ st.y+=0.4;
 if(st.y>c.height)st.y=0;
 });
 },30);
+/* ========= PARALLAX DEPTH ========= */
+document.addEventListener("mousemove",(e)=>{
+  let x=(e.clientX/window.innerWidth-.5)*10;
+  let y=(e.clientY/window.innerHeight-.5)*10;
+  document.body.style.backgroundPosition =
+      `${50+x}% ${50+y}%`;
+});
 
+
+/* ========= FLOATING BALLOONS ========= */
+function spawnBalloon(){
+  let b=document.createElement("div");
+  b.innerHTML="🎈";
+  b.style.position="fixed";
+  b.style.left=Math.random()*100+"vw";
+  b.style.bottom="-40px";
+  b.style.fontSize=(20+Math.random()*20)+"px";
+  b.style.pointerEvents="none";
+  document.body.appendChild(b);
+
+  let drift=(Math.random()*60-30);
+
+  b.animate([
+    {transform:"translate(0,0)"},
+    {transform:`translate(${drift}px,-${window.innerHeight+100}px)`}
+  ],{
+    duration:6000+Math.random()*4000,
+    easing:"linear"
+  }).onfinish=()=>b.remove();
+}
+setInterval(spawnBalloon,900);
+
+
+/* ========= AUTO ROMANTIC MESSAGE ========= */
+let romanticLines=[
+"❤️ You are my favorite notification",
+"✨ Tum meri life ka best moment ho",
+"🌙 Har dua mein tum ho",
+"💞 Forever yours"
+];
+
+let msgBox=document.createElement("div");
+msgBox.style.position="fixed";
+msgBox.style.bottom="30px";
+msgBox.style.left="50%";
+msgBox.style.transform="translateX(-50%)";
+msgBox.style.background="rgba(0,0,0,.4)";
+msgBox.style.padding="10px 20px";
+msgBox.style.borderRadius="20px";
+msgBox.style.fontSize="14px";
+document.body.appendChild(msgBox);
+
+let r=0;
+setInterval(()=>{
+  msgBox.innerText=romanticLines[r];
+  msgBox.animate([{opacity:0},{opacity:1}],{duration:600});
+  r=(r+1)%romanticLines.length;
+},3500);
+
+
+/* ========= BEAT PARTICLES ========= */
+function beatParticles(){
+  if(!dataArray) return;
+
+  analyser.getByteFrequencyData(dataArray);
+
+  let intensity=dataArray[5]/255;
+
+  for(let i=0;i<intensity*6;i++){
+    let p=document.createElement("div");
+    p.innerHTML="✨";
+    p.style.position="fixed";
+    p.style.left=50+"vw";
+    p.style.top=50+"vh";
+    document.body.appendChild(p);
+
+    let x=(Math.random()*300-150);
+    let y=(Math.random()*300-150);
+
+    p.animate([
+      {transform:"translate(0,0)",opacity:1},
+      {transform:`translate(${x}px,${y}px)`,opacity:0}
+    ],{duration:600});
+
+    setTimeout(()=>p.remove(),600);
+  }
+
+  requestAnimationFrame(beatParticles);
+}
+
+if(typeof analyser !== "undefined"){
+  beatParticles();
+}
 </script>
 </body>
 </html>
