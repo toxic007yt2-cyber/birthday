@@ -348,6 +348,40 @@ h.animate([
 setTimeout(()=>h.remove(),900);
 }
 }
+  function heartRain(){
+setInterval(()=>{
+let h=document.createElement("div");
+h.className="float";
+h.innerHTML="❤️";
+h.style.left=Math.random()*100+"vw";
+h.style.top="-20px";
+document.body.appendChild(h);
+
+h.animate([
+{transform:"translateY(0px)"},
+{transform:`translateY(${window.innerHeight}px)`}
+],{duration:3000})
+.onfinish=()=>h.remove();
+
+},300);
+  }
+  function balloons(){
+setInterval(()=>{
+let b=document.createElement("div");
+b.className="float";
+b.innerHTML="🎈";
+b.style.left=Math.random()*100+"vw";
+b.style.bottom="-20px";
+document.body.appendChild(b);
+
+b.animate([
+{transform:"translateY(0px)"},
+{transform:"translateY(-110vh)"}
+],{duration:5000})
+.onfinish=()=>b.remove();
+
+},800);
+  }
 </script>
 <!-- SECRET BOSS SCREEN -->
 <div id="boss" class="popup">
