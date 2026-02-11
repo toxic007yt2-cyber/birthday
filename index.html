@@ -369,19 +369,29 @@ h.animate([
   function balloons(){
 setInterval(()=>{
 let b=document.createElement("div");
-b.className="float";
+
 b.innerHTML="🎈";
+b.style.position="fixed";
+b.style.pointerEvents="none";
+b.style.zIndex="0";
+
 b.style.left=Math.random()*100+"vw";
-b.style.bottom="-20px";
+b.style.bottom="-40px";
+b.style.fontSize=(20+Math.random()*20)+"px";
+
 document.body.appendChild(b);
 
-b.animate([
-{transform:"translateY(0px)"},
-{transform:"translateY(-110vh)"}
-],{duration:5000})
-.onfinish=()=>b.remove();
+let drift=(Math.random()*60-30);
 
-},800);
+b.animate([
+{transform:"translate(0,0)"},
+{transform:`translate(${drift}px,-${window.innerHeight+100}px)`}
+],{
+duration:6000+Math.random()*4000,
+easing:"linear"
+}).onfinish=()=>b.remove();
+
+},900);
   }
 </script>
 <!-- SECRET BOSS SCREEN -->
