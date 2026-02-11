@@ -249,10 +249,43 @@ secretMsg.style.display="block";
 }
 }
 
+/* ===== REAL SWAP SYSTEM ===== */
+
+let selected = null;
+
 function swap(i){
-let j=Math.floor(Math.random()*9);
-[order[i],order[j]]=[order[j],order[i]];
-draw();
+
+  // first tap select
+  if(selected === null){
+    selected = i;
+    highlight(i);
+    return;
+  }
+
+  // second tap swap
+  [order[selected], order[i]] =
+  [order[i], order[selected]];
+
+  selected = null;
+  draw();
+
+  checkSolved();
+}
+
+
+/* highlight tile */
+function highlight(i){
+  let tiles=document.querySelectorAll(".tile");
+  tiles.forEach(t=>t.style.outline="none");
+  tiles[i].style.outline="3px solid white";
+}
+
+
+/* solved check */
+function checkSolved(){
+  if(JSON.stringify(order) === JSON.stringify([0,1,2,3,4,5,6,7,8])){
+    openBoss();   // unlock popup ❤️
+  }
 }
 
 function shufflePuzzle(){
