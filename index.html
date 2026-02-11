@@ -192,10 +192,20 @@ visualizer.appendChild(b);
 let bars=document.querySelectorAll(".bar");
 
 function playMusic(){
-song.play();
-setInterval(()=>{
-bars.forEach(b=>b.style.height=(Math.random()*50)+"px");
-},100);
+
+  const audio = document.getElementById("song");
+  audio.play().catch(()=>{});
+
+  // visualizer bars
+  setInterval(()=>{
+    bars.forEach(b=>{
+      b.style.height=(Math.random()*60+5)+"px";
+    });
+  },100);
+
+  // effects start
+  heartRain();
+  balloons();
 }
 
 /* countdown */
