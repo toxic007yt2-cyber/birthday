@@ -18,92 +18,55 @@ justify-content:center;
 background:linear-gradient(120deg,#1e3c72,#ff4b2b);
 }
 
-/* background stars */
+/* STARS */
 canvas{
 position:fixed;
-top:0;
-left:0;
+top:0;left:0;
 z-index:-1;
 }
 
-/* card */
+/* CARD */
 .card{
-position:relative;
-z-index:2;
-
 background:rgba(255,255,255,.12);
 backdrop-filter:blur(22px);
-
 padding:40px;
 border-radius:26px;
 text-align:center;
-
 width:min(92vw,520px);
-
 border:1px solid rgba(255,255,255,.25);
-
 box-shadow:
 0 0 40px #ff4b2b,
 0 0 80px #ff416c,
 0 0 120px rgba(255,255,255,.25);
-
 transition:.25s;
 }
-
-.card:hover{
-transform:scale(1.06);
-}
-.card:hover{ transform:scale(1.05); }
+.card:hover{transform:scale(1.05);}
 
 #slide{
-width:180px;
-height:180px;
+width:180px;height:180px;
 border-radius:18px;
 object-fit:cover;
 cursor:pointer;
-transition:.35s ease;
-
-box-shadow:
-0 0 18px rgba(255,80,120,.7),
-0 0 35px rgba(255,80,120,.5);
-
-filter:saturate(1.15) contrast(1.05);
+transition:.35s;
+box-shadow:0 0 20px rgba(255,80,120,.7);
 }
+#slide:hover{transform:scale(1.12);}
 
-/* cinematic hover zoom */
-#slide:hover{
-transform:scale(1.12) rotate(1deg);
-
-box-shadow:
-0 0 25px rgba(255,90,130,.9),
-0 0 55px rgba(255,90,130,.7);
-}
-.card h2{
-font-size:26px;
-letter-spacing:.5px;
-}
-
-#typing{
-font-size:15px;
-opacity:.9;
-}
-#slide:hover{
-transform:scale(1.08);
-}
-
-/* buttons */
 button{
 margin-top:12px;
 padding:10px 18px;
 border:none;
 border-radius:12px;
 background:linear-gradient(45deg,#ff4b2b,#ff416c);
-color:white;
-font-weight:bold;
+color:white;font-weight:bold;
 cursor:pointer;
 }
 
-/* popup */
+/* VISUALIZER */
+#visualizer{display:flex;gap:3px;justify-content:center;margin-top:10px;}
+.bar{width:4px;height:10px;background:white;}
+
+/* POPUP */
 .popup{
 position:fixed;
 top:0;left:0;
@@ -115,25 +78,11 @@ background:rgba(0,0,0,.6);
 z-index:999;
 }
 .popup-box{
-background:white;
-color:black;
-padding:25px;
-border-radius:20px;
+background:white;color:black;
+padding:25px;border-radius:20px;
 }
 
-/* visualizer */
-#visualizer{
-display:flex;
-gap:3px;
-margin-top:10px;
-justify-content:center;
-}
-.bar{
-width:4px;
-height:10px;
-background:white;
-}
-/* PUZZLE STYLE */
+/* PUZZLE */
 #puzzle{
 display:grid;
 grid-template-columns:repeat(3,70px);
@@ -141,20 +90,15 @@ gap:6px;
 justify-content:center;
 margin-top:10px;
 }
-
 .tile{
-width:70px;
-height:70px;
+width:70px;height:70px;
 background:linear-gradient(45deg,#ff416c,#ff4b2b);
-display:flex;
-align-items:center;
-justify-content:center;
-font-size:22px;
-border-radius:12px;
+display:flex;align-items:center;justify-content:center;
+font-size:22px;border-radius:12px;
 cursor:pointer;
-user-select:none;
 }
-/* viewer */
+
+/* VIEWER */
 #viewer{
 position:fixed;
 top:0;left:0;
@@ -165,17 +109,9 @@ align-items:center;
 background:black;
 z-index:999;
 }
-#viewer img{
-max-width:90%;
-max-height:90%;
-}
+#viewer img{max-width:90%;max-height:90%;}
 
-/* floating emoji */
-.float{
-position:fixed;
-pointer-events:none;
-font-size:22px;
-}
+.float{position:fixed;pointer-events:none;font-size:22px;}
 </style>
 </head>
 
@@ -194,15 +130,16 @@ font-size:22px;
 
 <div id="visualizer"></div>
 <div id="count"></div>
-<h3>🧩 Solve My Love Puzzle</h3>
 
+<h3>🧩 Solve My Love Puzzle</h3>
 <div id="puzzle"></div>
 <button onclick="shufflePuzzle()">Shuffle</button>
+
 <audio id="song" src="music.mp3"></audio>
 <audio id="bdayVoice" src="happy.mp3"></audio>
 </div>
 
-<!-- LOVE LETTER -->
+<!-- LETTER -->
 <div id="letter" class="popup">
 <div class="popup-box">
 <p>
@@ -215,50 +152,56 @@ Tere se milne ki hi Fariyaad karte hai ❤️
 </div>
 </div>
 
-<!-- VIEWER -->
+<!-- SECRET -->
+<div id="secretMsg" class="popup">
+<div class="popup-box">
+<h2>❤️ Secret ❤️</h2>
+<p id="loveText"></p>
+<button onclick="secretMsg.style.display='none'">Close</button>
+</div>
+</div>
+
 <div id="viewer" onclick="this.style.display='none'">
 <img id="viewImg">
 </div>
 
 <script>
 
-/* slideshow */
+/* SLIDESHOW */
 const slide=document.getElementById("slide");
 const viewer=document.getElementById("viewer");
 const viewImg=document.getElementById("viewImg");
 
-const images=[
-"photo1.jpg","photo2.jpg","photo3.jpg","photo4.jpg",
+const imgs=["photo1.jpg","photo2.jpg","photo3.jpg","photo4.jpg",
 "photo5.jpg","photo6.jpg","photo7.jpg","photo8.jpg",
-"photo9.jpg","photo10.jpg","photo11.jpg","photo12.jpg","photo13.jpg"
-];
+"photo9.jpg","photo10.jpg","photo11.jpg","photo12.jpg","photo13.jpg"];
 
-let idx=0;
-setInterval(()=>{
-idx=(idx+1)%images.length;
-slide.src=images[idx];
-},2000);
+let i=0;
+setInterval(()=>{i=(i+1)%imgs.length;slide.src=imgs[i];},2000);
+slide.onclick=()=>{viewImg.src=slide.src;viewer.style.display="flex";};
 
-slide.onclick=()=>{
-viewImg.src=slide.src;
-viewer.style.display="flex";
-};
-
-/* popup */
+/* LETTER */
 const letter=document.getElementById("letter");
-function openLetter(){ letter.style.display="flex"; }
-function closeLetter(){ letter.style.display="none"; }
+function openLetter(){letter.style.display="flex";}
+function closeLetter(){letter.style.display="none";}
 
-/* visualizer */
+/* VISUALIZER */
 const visualizer=document.getElementById("visualizer");
-for(let i=0;i<30;i++){
+for(let j=0;j<30;j++){
 let b=document.createElement("div");
 b.className="bar";
 visualizer.appendChild(b);
 }
 let bars=document.querySelectorAll(".bar");
 
-/* floating hearts on music */
+/* MUSIC */
+function playMusic(){
+song.play();
+setInterval(()=>bars.forEach(b=>b.style.height=(Math.random()*60+5)+"px"),100);
+heartRain();
+}
+
+/* HEART RAIN */
 function heartRain(){
 setInterval(()=>{
 let h=document.createElement("div");
@@ -267,73 +210,17 @@ h.innerHTML="❤️";
 h.style.left=Math.random()*100+"vw";
 h.style.top="-20px";
 document.body.appendChild(h);
-h.animate([
-{transform:"translateY(0px)"},
-{transform:`translateY(${window.innerHeight}px)`}
-],{duration:3000})
+h.animate([{transform:"translateY(0)"},{transform:`translateY(${innerHeight}px)`}],{duration:3000})
 .onfinish=()=>h.remove();
 },300);
 }
 
-/* balloons */
-function balloons(){
-setInterval(()=>{
-let b=document.createElement("div");
-b.className="float";
-b.innerHTML="🎈";
-b.style.left=Math.random()*100+"vw";
-b.style.bottom="-20px";
-document.body.appendChild(b);
-b.animate([
-{transform:"translateY(0px)"},
-{transform:"translateY(-110vh)"}
-],{duration:5000})
-.onfinish=()=>b.remove();
-},800);
-}
-
-/* music */
-function playMusic(){
-song.play();
-heartRain();
-balloons();
-
-setInterval(()=>{
-bars.forEach(b=>{
-b.style.height=(Math.random()*60+5)+"px";
-});
-},100);
-}
-
-/* typing */
+/* TYPE TEXT */
 let txt="You are my universe ❤️ Happy Birthday 🎂";
 let k=0;
-function type(){
-if(k<txt.length){
-typing.innerHTML+=txt[k++];
-setTimeout(type,50);
-}}
-type();
+(function type(){ if(k<txt.length){typing.innerHTML+=txt[k++];setTimeout(type,50);} })();
 
-/* birthday cake splash */
-function cakeExplosion(){
-for(let i=0;i<60;i++){
-let c=document.createElement("div");
-c.className="float";
-c.innerHTML="🎂";
-c.style.left=Math.random()*100+"vw";
-c.style.top="-20px";
-document.body.appendChild(c);
-c.animate([
-{transform:"translateY(0px) rotate(0deg)"},
-{transform:`translateY(${window.innerHeight}px) rotate(720deg)`}
-],{duration:2500})
-.onfinish=()=>c.remove();
-}
-bdayVoice.play().catch(()=>{});
-}
-
-/* countdown */
+/* COUNTDOWN */
 let done=false;
 let target=new Date();
 target.setDate(12);
@@ -341,136 +228,34 @@ target.setHours(0,0,0,0);
 
 setInterval(()=>{
 let diff=target-new Date();
-
 if(diff<=0){
 count.innerHTML="🎂 TODAY 🎂";
-if(!done){
-cakeExplosion();
-done=true;
-}
+if(!done){bdayVoice.play();done=true;}
 }else{
 let d=Math.floor(diff/86400000);
 let h=Math.floor(diff%86400000/3600000);
 let m=Math.floor(diff%3600000/60000);
 let s=Math.floor(diff%60000/1000);
 count.innerHTML=`${d}d ${h}h ${m}m ${s}s ❤️`;
-}
-},1000);
+}},1000);
 
-/* stars */
+/* STARS */
 let c=document.getElementById("stars");
 let ctx=c.getContext("2d");
-c.width=innerWidth;
-c.height=innerHeight;
+c.width=innerWidth;c.height=innerHeight;
 let stars=[];
-for(let i=0;i<120;i++)
-stars.push({x:Math.random()*c.width,y:Math.random()*c.height});
-
+for(let s=0;s<120;s++)stars.push({x:Math.random()*c.width,y:Math.random()*c.height});
 setInterval(()=>{
 ctx.clearRect(0,0,c.width,c.height);
 ctx.fillStyle="white";
-stars.forEach(st=>{
-ctx.fillRect(st.x,st.y,2,2);
-st.y+=0.4;
-if(st.y>c.height)st.y=0;
-});
+stars.forEach(st=>{ctx.fillRect(st.x,st.y,2,2);st.y+=0.4;if(st.y>c.height)st.y=0;});
 },30);
-/* ========= PARALLAX DEPTH ========= */
-document.addEventListener("mousemove",(e)=>{
-  let x=(e.clientX/window.innerWidth-.5)*10;
-  let y=(e.clientY/window.innerHeight-.5)*10;
-  document.body.style.backgroundPosition =
-      `${50+x}% ${50+y}%`;
-});
 
-
-/* ========= FLOATING BALLOONS ========= */
-function spawnBalloon(){
-  let b=document.createElement("div");
-  b.innerHTML="🎈";
-  b.style.position="fixed";
-  b.style.left=Math.random()*100+"vw";
-  b.style.bottom="-40px";
-  b.style.fontSize=(20+Math.random()*20)+"px";
-  b.style.pointerEvents="none";
-  document.body.appendChild(b);
-
-  let drift=(Math.random()*60-30);
-
-  b.animate([
-    {transform:"translate(0,0)"},
-    {transform:`translate(${drift}px,-${window.innerHeight+100}px)`}
-  ],{
-    duration:6000+Math.random()*4000,
-    easing:"linear"
-  }).onfinish=()=>b.remove();
-}
-setInterval(spawnBalloon,900);
-
-
-/* ========= AUTO ROMANTIC MESSAGE ========= */
-let romanticLines=[
-"❤️ You are my favorite notification",
-"✨ Tum meri life ka best moment ho",
-"🌙 Har dua mein tum ho",
-"💞 Forever yours"
-];
-
-let msgBox=document.createElement("div");
-msgBox.style.position="fixed";
-msgBox.style.bottom="30px";
-msgBox.style.left="50%";
-msgBox.style.transform="translateX(-50%)";
-msgBox.style.background="rgba(0,0,0,.4)";
-msgBox.style.padding="10px 20px";
-msgBox.style.borderRadius="20px";
-msgBox.style.fontSize="14px";
-document.body.appendChild(msgBox);
-
-let r=0;
-setInterval(()=>{
-  msgBox.innerText=romanticLines[r];
-  msgBox.animate([{opacity:0},{opacity:1}],{duration:600});
-  r=(r+1)%romanticLines.length;
-},3500);
-
-
-/* ========= BEAT PARTICLES ========= */
-function beatParticles(){
-  if(!dataArray) return;
-
-  analyser.getByteFrequencyData(dataArray);
-
-  let intensity=dataArray[5]/255;
-
-  for(let i=0;i<intensity*6;i++){
-    let p=document.createElement("div");
-    p.innerHTML="✨";
-    p.style.position="fixed";
-    p.style.left=50+"vw";
-    p.style.top=50+"vh";
-    document.body.appendChild(p);
-
-    let x=(Math.random()*300-150);
-    let y=(Math.random()*300-150);
-
-    p.animate([
-      {transform:"translate(0,0)",opacity:1},
-      {transform:`translate(${x}px,${y}px)`,opacity:0}
-    ],{duration:600});
-
-    setTimeout(()=>p.remove(),600);
-  }
-
-  requestAnimationFrame(beatParticles);
-}
-
-if(typeof analyser !== "undefined"){
-  beatParticles();
-}
-/* PUZZLE GAME */
+/* PUZZLE */
 const puzzle=document.getElementById("puzzle");
+const loveText=document.getElementById("loveText");
 let nums=[1,2,3,4,5,6,7,8,"❤️"];
+let solved=[1,2,3,4,5,6,7,8,"❤️"];
 
 function drawPuzzle(){
 puzzle.innerHTML="";
@@ -478,23 +263,17 @@ nums.forEach((n,i)=>{
 let d=document.createElement("div");
 d.className="tile";
 d.innerHTML=n;
-d.onclick=()=>swap(i);
+d.onclick=()=>{let j=Math.floor(Math.random()*9);[nums[i],nums[j]]=[nums[j],nums[i]];drawPuzzle();};
 puzzle.appendChild(d);
 });
+if(JSON.stringify(nums)===JSON.stringify(solved)){
+loveText.innerText="💖 Tum meri life ka best part ho";
+secretMsg.style.display="flex";
 }
-
-function swap(i){
-let j=Math.floor(Math.random()*9);
-[nums[i],nums[j]]=[nums[j],nums[i]];
+}
+function shufflePuzzle(){nums.sort(()=>Math.random()-0.5);drawPuzzle();}
 drawPuzzle();
-}
 
-function shufflePuzzle(){
-nums.sort(()=>Math.random()-0.5);
-drawPuzzle();
-}
-
-drawPuzzle();  
 </script>
 </body>
 </html>
