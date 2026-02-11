@@ -255,8 +255,9 @@ d.onclick=()=>swap(i);
 puzzle.appendChild(d);
 });
 if(JSON.stringify(order)==JSON.stringify([0,1,2,3,4,5,6,7,8])){
-secretMsg.style.display="block";
-}
+    secretMsg.style.display="block";
+    openBoss();
+    heartExplosion();
 }
 
 /* ===== REAL SWAP SYSTEM ===== */
