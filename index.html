@@ -262,7 +262,49 @@ draw();
 }
 
 draw();
+/* ===== HIDDEN BOSS HEART CLICK ===== */
+const boss = document.getElementById("boss");
+let heartClicks = 0;
 
+// listen for heart click anywhere
+document.addEventListener("click",(e)=>{
+  if(e.target.innerText.includes("❤️")){
+    heartClicks++;
+
+    if(heartClicks >= 5){
+      openBoss();
+      heartClicks = 0;
+    }
+  }
+});
+
+function openBoss(){
+  boss.style.display="flex";
+  heartExplosion();
+}
+
+function closeBoss(){
+  boss.style.display="none";
+}
+
+/* explosion effect */
+function heartExplosion(){
+for(let i=0;i<40;i++){
+let h=document.createElement("div");
+h.innerHTML="❤️";
+h.style.position="fixed";
+h.style.left=Math.random()*100+"vw";
+h.style.top=Math.random()*100+"vh";
+document.body.appendChild(h);
+
+h.animate([
+{transform:"scale(0)",opacity:1},
+{transform:"scale(2)",opacity:0}
+],{duration:900});
+
+setTimeout(()=>h.remove(),900);
+}
+}
 </script>
 <!-- SECRET BOSS SCREEN -->
 <div id="boss" class="popup">
