@@ -1,11 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html><html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Ultimate Birthday ❤️</title>
-
-<style>
+<title>Ultimate Birthday ❤️</title><style>
 body{
 margin:0;
 font-family:sans-serif;
@@ -18,7 +15,7 @@ justify-content:center;
 background:linear-gradient(120deg,#1e3c72,#ff4b2b);
 }
 
-/* canvas stars */
+/* stars canvas */
 canvas{
 position:fixed;
 top:0;
@@ -28,8 +25,10 @@ z-index:-1;
 
 /* card */
 .card{
+position:relative;
+z-index:2;
 background:rgba(255,255,255,.12);
-backdrop-filter:blur(20px);
+backdrop-filter:blur(18px);
 padding:35px;
 border-radius:25px;
 text-align:center;
@@ -65,11 +64,7 @@ gap:3px;
 justify-content:center;
 margin-top:8px;
 }
-.bar{
-width:4px;
-height:10px;
-background:white;
-}
+.bar{width:4px;height:10px;background:white;}
 
 /* puzzle */
 #puzzle{
@@ -88,12 +83,7 @@ cursor:pointer;
 }
 
 /* hidden message */
-#secretMsg{
-display:none;
-margin-top:12px;
-font-size:18px;
-color:#fff;
-}
+#secretMsg{display:none;margin-top:12px;font-size:18px}
 
 /* popup */
 .popup{
@@ -104,6 +94,7 @@ display:none;
 align-items:center;
 justify-content:center;
 background:rgba(0,0,0,.6);
+z-index:999;
 }
 .popup-box{
 background:white;
@@ -111,39 +102,19 @@ color:black;
 padding:20px;
 border-radius:18px;
 }
-</style>
-</head>
+</style></head><body><canvas id="stars"></canvas>
 
-<body>
-
-<canvas id="stars"></canvas>
-
-<div class="card">
-
-<img id="slide" src="photo1.jpg">
-
-<h2>Happy Birthday Babayyy ❤️</h2>
-<p id="typing"></p>
-
-<button onclick="openLetter()">💌 Love Letter</button>
+<div class="card"><img id="slide" src="photo1.jpg"><h2>Happy Birthday Babayyy ❤️</h2>
+<p id="typing"></p><button onclick="openLetter()">💌 Love Letter</button>
 <button onclick="playMusic()">🎵 Play</button>
 
 <div id="visualizer"></div>
-<div id="count"></div>
-
-<h3>🧩 Solve My Love Puzzle</h3>
+<div id="count"></div><h3>🧩 Solve My Love Puzzle</h3>
 <div id="puzzle"></div>
-<button onclick="shufflePuzzle()">Shuffle</button>
-
-<div id="secretMsg">💖 Tum meri life ka best part ho 💖</div>
-
-<audio id="song" src="music.mp3"></audio>
+<button onclick="shufflePuzzle()">Shuffle</button><div id="secretMsg">💖 Tum meri life ka best part ho 💖</div><audio id="song" src="music.mp3"></audio>
 <audio id="bdayVoice" src="happy.mp3"></audio>
 
-</div>
-
-<!-- LOVE LETTER -->
-<div id="letter" class="popup">
+</div><div id="letter" class="popup">
 <div class="popup-box">
 <p>
 Pass nahi ho firr bhi Tumse pyaar karte hai,<br>
@@ -153,31 +124,29 @@ Tere se milne ki hi fariyaad karte hai ❤️
 </p>
 <button onclick="closeLetter()">Close</button>
 </div>
+</div><div id="boss" class="popup">
+<div class="popup-box">
+<h2>❤️ You found my secret ❤️</h2>
+<p>No matter where you go,<br>You’ll always be my favorite person ✨</p>
+<button onclick="closeBoss()">Close</button>
 </div>
-
-<script>
+</div><script>
 
 /* typing */
 let txt="You are my universe ❤️ Happy Birthday 🎂";
-let i=0;
-function type(){
-if(i<txt.length){
-typing.innerHTML+=txt[i++];
+let ti=0;
+(function type(){
+if(ti<txt.length){
+typing.innerHTML+=txt[ti++];
 setTimeout(type,50);
-}}
-type();
+}})();
 
 /* slideshow */
-const imgs=[
-"photo1.jpg","photo2.jpg","photo3.jpg","photo4.jpg",
+const imgs=["photo1.jpg","photo2.jpg","photo3.jpg","photo4.jpg",
 "photo5.jpg","photo6.jpg","photo7.jpg","photo8.jpg",
-"photo9.jpg","photo10.jpg","photo11.jpg","photo12.jpg","photo13.jpg"
-];
+"photo9.jpg","photo10.jpg","photo11.jpg","photo12.jpg","photo13.jpg"];
 let s=0;
-setInterval(()=>{
-s=(s+1)%imgs.length;
-slide.src=imgs[s];
-},2000);
+setInterval(()=>{s=(s+1)%imgs.length;slide.src=imgs[s];},2000);
 
 /* popup */
 function openLetter(){letter.style.display="flex";}
@@ -192,27 +161,16 @@ visualizer.appendChild(b);
 let bars=document.querySelectorAll(".bar");
 
 function playMusic(){
-
-  const audio = document.getElementById("song");
-  audio.play().catch(()=>{});
-
-  // visualizer bars
-  setInterval(()=>{
-    bars.forEach(b=>{
-      b.style.height=(Math.random()*60+5)+"px";
-    });
-  },100);
-
-  // effects start
-  heartRain();
-  balloons();
+song.play().catch(()=>{});
+heartRain();
+balloons();
+setInterval(()=>{bars.forEach(b=>b.style.height=(Math.random()*60+5)+"px");},100);
 }
 
 /* countdown */
 let target=new Date();
 target.setDate(12);
 target.setHours(0,0,0,0);
-
 setInterval(()=>{
 let diff=target-new Date();
 let d=Math.floor(diff/86400000);
@@ -223,26 +181,21 @@ count.innerHTML=`${d}d ${h}h ${m}m ${s}s ❤️`;
 },1000);
 
 /* stars */
-let c=stars.getContext("2d");
+let ctx=stars.getContext("2d");
 stars.width=innerWidth;
 stars.height=innerHeight;
 let arr=[];
-for(let k=0;k<100;k++)
-arr.push({x:Math.random()*stars.width,y:Math.random()*stars.height});
-
+for(let i=0;i<100;i++)arr.push({x:Math.random()*stars.width,y:Math.random()*stars.height});
 setInterval(()=>{
-c.clearRect(0,0,stars.width,stars.height);
-c.fillStyle="white";
-arr.forEach(st=>{
-c.fillRect(st.x,st.y,2,2);
-st.y+=.3;
-if(st.y>stars.height)st.y=0;
-});
+ctx.clearRect(0,0,stars.width,stars.height);
+ctx.fillStyle="white";
+arr.forEach(st=>{ctx.fillRect(st.x,st.y,2,2);st.y+=.3;if(st.y>stars.height)st.y=0;});
 },30);
 
-/* ===== PUZZLE ===== */
+/* puzzle */
 const puzzle=document.getElementById("puzzle");
 let order=[0,1,2,3,4,5,6,7,8];
+let selected=null;
 
 function draw(){
 puzzle.innerHTML="";
@@ -254,84 +207,36 @@ d.style.backgroundPosition=`-${(n%3)*80}px -${Math.floor(n/3)*80}px`;
 d.onclick=()=>swap(i);
 puzzle.appendChild(d);
 });
-if(JSON.stringify(order)==JSON.stringify([0,1,2,3,4,5,6,7,8])){
-    secretMsg.style.display="block";
-    openBoss();
-    heartExplosion();
 }
-
-/* ===== REAL SWAP SYSTEM ===== */
-
-let selected = null;
 
 function swap(i){
-
-  // first tap select
-  if(selected === null){
-    selected = i;
-    highlight(i);
-    return;
-  }
-
-  // second tap swap
-  [order[selected], order[i]] =
-  [order[i], order[selected]];
-
-  selected = null;
-  draw();
-
-  checkSolved();
-}
-
-
-/* highlight tile */
-function highlight(i){
-  let tiles=document.querySelectorAll(".tile");
-  tiles.forEach(t=>t.style.outline="none");
-  tiles[i].style.outline="3px solid white";
-}
-
-
-/* solved check */
-function checkSolved(){
-  if(JSON.stringify(order) === JSON.stringify([0,1,2,3,4,5,6,7,8])){
-    openBoss();   // unlock popup ❤️
-  }
+if(selected===null){selected=i;return;}
+[order[selected],order[i]]=[order[i],order[selected]];
+selected=null;
+draw();
+checkSolved();
 }
 
 function shufflePuzzle(){
 order.sort(()=>Math.random()-0.5);
-secretMsg.style.display="none";
 draw();
 }
 
-draw();
-/* ===== HIDDEN BOSS HEART CLICK ===== */
-const boss = document.getElementById("boss");
-let heartClicks = 0;
-
-// listen for heart click anywhere
-document.addEventListener("click",(e)=>{
-  if(e.target.innerText.includes("❤️")){
-    heartClicks++;
-
-    if(heartClicks >= 5){
-      openBoss();
-      heartClicks = 0;
-    }
-  }
-});
-
-function openBoss(){
-  boss.style.display="flex";
-  heartExplosion();
+function checkSolved(){
+if(JSON.stringify(order)==JSON.stringify([0,1,2,3,4,5,6,7,8])){
+secretMsg.style.display="block";
+openBoss();
+}
 }
 
-function closeBoss(){
-  boss.style.display="none";
-}
+/* start shuffled */
+shufflePuzzle();
 
-/* explosion effect */
+/* boss */
+function openBoss(){boss.style.display="flex";heartExplosion();}
+function closeBoss(){boss.style.display="none";}
+
+/* effects */
 function heartExplosion(){
 for(let i=0;i<40;i++){
 let h=document.createElement("div");
@@ -340,71 +245,37 @@ h.style.position="fixed";
 h.style.left=Math.random()*100+"vw";
 h.style.top=Math.random()*100+"vh";
 document.body.appendChild(h);
-
-h.animate([
-{transform:"scale(0)",opacity:1},
-{transform:"scale(2)",opacity:0}
-],{duration:900});
-
+h.animate([{transform:"scale(0)"},{transform:"scale(2)",opacity:0}],{duration:900});
 setTimeout(()=>h.remove(),900);
-}
-}
-  function heartRain(){
+}}
+
+function heartRain(){
 setInterval(()=>{
 let h=document.createElement("div");
-h.className="float";
 h.innerHTML="❤️";
+h.style.position="fixed";
 h.style.left=Math.random()*100+"vw";
 h.style.top="-20px";
+h.style.pointerEvents="none";
 document.body.appendChild(h);
-
-h.animate([
-{transform:"translateY(0px)"},
-{transform:`translateY(${window.innerHeight}px)`}
-],{duration:3000})
+h.animate([{transform:"translateY(0)"},{transform:`translateY(${innerHeight}px)`}],{duration:3000})
 .onfinish=()=>h.remove();
-
 },300);
-  }
-  function balloons(){
+}
+
+function balloons(){
 setInterval(()=>{
 let b=document.createElement("div");
-
 b.innerHTML="🎈";
 b.style.position="fixed";
-b.style.pointerEvents="none";
-b.style.zIndex="0";
-
 b.style.left=Math.random()*100+"vw";
 b.style.bottom="-40px";
-b.style.fontSize=(20+Math.random()*20)+"px";
-
+b.style.pointerEvents="none";
 document.body.appendChild(b);
-
-let drift=(Math.random()*60-30);
-
-b.animate([
-{transform:"translate(0,0)"},
-{transform:`translate(${drift}px,-${window.innerHeight+100}px)`}
-],{
-duration:6000+Math.random()*4000,
-easing:"linear"
-}).onfinish=()=>b.remove();
-
+b.animate([{transform:"translateY(0)"},{transform:"translateY(-110vh)"}],{duration:5000})
+.onfinish=()=>b.remove();
 },900);
-  }
-</script>
-<!-- SECRET BOSS SCREEN -->
-<div id="boss" class="popup">
-  <div class="popup-box">
-    <h2>❤️ You found my secret ❤️</h2>
-    <p>
-      No matter where you go,<br>
-      You’ll always be my favorite person ✨
-    </p>
-    <button onclick="closeBoss()">Close</button>
-  </div>
-</div>
+}
 
-</body>
+</script></body>
 </html>
